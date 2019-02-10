@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Entries from '../Entries';
+import Preview from '../Preview';
 
 export class DataEntry extends Component {
   render() {
@@ -26,10 +27,23 @@ export class DataEntry extends Component {
             width: '55vw',
             overflow: 'scroll',
             paddingTop: '10px',
-            paddingRight: '10xpx'
+            paddingRight: '10xpx',
+            display: 'inline-block'
           }}
         >
           <Entries />
+        </div>
+        <div
+          style={{
+            height: '85vh',
+            width: '45vw',
+            overflow: 'scroll',
+            paddingTop: '10px',
+            paddingRight: '10xpx',
+            display: 'inline-block'
+          }}
+        >
+          <Preview />
         </div>
       </div>
     );
