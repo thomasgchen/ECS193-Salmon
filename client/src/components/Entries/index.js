@@ -23,7 +23,7 @@ export class Entries extends Component {
 
   render() {
     const { error, loading, items } = this.props.cases;
-    if (!items) {
+    if (items === undefined || items === null || items.length === 0) {
       return (
         <div>
           {loading ? <p>loading...</p> : <p>No items in db.</p>}
@@ -33,15 +33,6 @@ export class Entries extends Component {
     } else {
       return (
         <div>
-          {items[0] !== undefined && (
-            <EntryItem
-              id={-1}
-              key="header entry"
-              fields={this.structuredFields(items[0])}
-              isHeader
-              handleUpdate={this.handleUpdate}
-            />
-          )}
           {items.map(item => {
             return (
               <EntryItem

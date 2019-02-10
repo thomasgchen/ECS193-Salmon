@@ -6,8 +6,22 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
 import EditIcon from '@material-ui/icons/Edit';
+import Grid from '@material-ui/core/Grid';
+import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
+  root: {
+    // flexGrow: 1,
+    margin: theme.spacing.unit * 2,
+    marginLeft: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit * 2,
+    borderBottom: '3px solid #F4BBB8'
+  },
+  idCell: {
+    textAlign: 'center',
+    alignSelf: 'center',
+    color: '#F4BBB8'
+  },
   button: {
     margin: theme.spacing.unit
   },
@@ -21,6 +35,7 @@ export class EntryItem extends Component {
     super(props);
     this.state = {
       isEditing: false,
+      isHovering: false,
       changes: {}
     };
   }
@@ -58,41 +73,70 @@ export class EntryItem extends Component {
     this.setState({ isEditing: true });
   };
 
+  handleMouseEnter = () => {
+    this.setState({ isHovering: true });
+  };
+
+  handleMouseLeave = () => {
+    this.setState({ isHovering: false });
+  };
+
   render() {
-    const { fields, isHeader } = this.props;
-    const { isEditing, changes } = this.state;
+    const { fields, isHeader, classes, id } = this.props;
+    const { isEditing, changes, isHovering } = this.state;
     return (
-      <div>
-        {fields.map(field => {
-          return (
-            <Field
-              key={field.name}
-              name={field.name}
-              value={field.value}
-              currentValue={changes[field.name] === undefined ? field.value : changes[field.name]}
-              formType={field.formType}
-              isHeader={isHeader}
-              isEditing={isEditing}
-              handleChange={this.handleFieldChange}
-            />
-          );
-        })}
-        {isEditing && !isHeader && (
-          <IconButton aria-label="Delete" onClick={this.handleClearChanges}>
-            <CloseIcon />
-          </IconButton>
-        )}
-        {isEditing && !isHeader && (
-          <IconButton aria-label="Check" onClick={this.handleSubmitChanges}>
-            <CheckIcon />
-          </IconButton>
-        )}
-        {!isEditing && !isHeader && (
-          <IconButton aria-label="Edit" onClick={this.handleEditPress}>
-            <EditIcon />
-          </IconButton>
-        )}
-      </div>
+      <Grid
+        container
+        className={classes.root}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+      >
+        <Grid item xs={1} className={classes.idCell}>
+          <p>
+            <strong>{id}</strong>
+          </p>
+        </Grid>
+        <Grid item xs={10}>
+          <Grid container spacing={8}>
+            {fields.map(field => {
+              if (field.name === 'id') return;
+              return (
+                <Grid item xs={2}>
+                  <Field
+                    key={field.name}
+                    name={field.name}
+                    value={field.value}
+                    currentValue={
+                      changes[field.name] === undefined ? field.value : changes[field.name]
+                    }
+                    formType={field.formType}
+                    isHeader={isHeader}
+                    isEditing={isEditing}
+                    handleChange={this.handleFieldChange}
+                  />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Grid>
+        <Grid item xs={1} className={classes.idCell}>
+          {isEditing && !isHeader && (
+            <IconButton aria-label="Delete" onClick={this.handleClearChanges}>
+              <CloseIcon />
+            </IconButton>
+          )}
+          {isEditing && !isHeader && (
+            <IconButton aria-label="Check" onClick={this.handleSubmitChanges}>
+              <CheckIcon />
+            </IconButton>
+          )}
+          {!isEditing && !isHeader && isHovering && (
+            <IconButton aria-label="Edit" onClick={this.handleEditPress}>
+              <EditIcon />
+            </IconButton>
+          )}
+        </Grid>
+      </Grid>
     );
   }
 }

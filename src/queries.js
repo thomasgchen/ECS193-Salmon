@@ -17,7 +17,7 @@ sequelize
   });
 
 const getCases = (req, res) => {
-  models.Case.findAll()
+  models.Case.findAll({ attributes: { exclude: ['createdAt', 'updatedAt'] } })
     .then(cases => {
       res.status(200).json(cases);
     })
