@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchCasesBegin } from '../../redux/actions/cases';
+import { fetchCases, updateCases } from '../../redux/actions/cases';
 import EntryItem from './EntryItem';
 import _ from 'lodash';
 
 export class Entries extends Component {
   componentDidMount() {
-    this.props.dispatch(fetchCasesBegin());
+    this.props.fetchCases();
   }
 
   structuredFields = item => {
@@ -15,6 +15,10 @@ export class Entries extends Component {
       row.push({ name: key, value: String(value), formType: 'string' });
     });
     return row;
+  };
+
+  handleUpdate = (id, data) => {
+    this.props.updateCases({ ...data, id });
   };
 
   render() {
@@ -35,10 +39,18 @@ export class Entries extends Component {
               key="header entry"
               fields={this.structuredFields(items[0])}
               isHeader
+              handleUpdate={this.handleUpdate}
             />
           )}
           {items.map(item => {
-            return <EntryItem id={item.id} key={item.id} fields={this.structuredFields(item)} />;
+            return (
+              <EntryItem
+                id={item.id}
+                key={item.id}
+                fields={this.structuredFields(item)}
+                handleUpdate={this.handleUpdate}
+              />
+            );
           })}
         </div>
       );
@@ -50,7 +62,17 @@ const mapStateToProps = state => {
   return { cases: state.cases };
 };
 
-export default connect(mapStateToProps)(Entries);
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchCases: () => dispatch(fetchCases()),
+    updateCases: (id, data) => dispatch(updateCases(id, data))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Entries);
 
 export { default as Field } from './Field';
 export { default as EntryItem } from './EntryItem';

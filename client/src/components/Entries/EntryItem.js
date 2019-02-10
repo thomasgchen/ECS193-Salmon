@@ -27,7 +27,7 @@ export class EntryItem extends Component {
 
   handleSubmitChanges = event => {
     event.preventDefault();
-    const { fields } = this.props;
+    const { fields, handleUpdate, id } = this.props;
     const { changes } = this.state;
     let update_object = {};
     fields.map(field => {
@@ -35,7 +35,7 @@ export class EntryItem extends Component {
     });
 
     this.setState({ changes: {}, isEditing: false });
-    console.log(update_object);
+    handleUpdate(id, changes);
   };
 
   handleFieldChange = (key, value) => {
@@ -109,6 +109,7 @@ EntryItem.propTypes = {
   ).isRequired,
   isLoading: PropTypes.bool, // If true show loading icon
   isHeader: PropTypes.bool, // If true only display the fields name's not value
+  handleUpdate: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired
 };
 

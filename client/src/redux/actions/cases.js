@@ -1,6 +1,10 @@
+import axios from 'axios';
 export const FETCH_CASES_BEGIN = 'FETCH_CASES_BEGIN';
 export const FETCH_CASES_SUCCESS = 'FETCH_CASES_SUCCESS';
 export const FETCH_CASES_FAILURE = 'FETCH_CASES_FAILURE';
+export const UPDATE_CASES_BEGIN = 'UPDATE_CASES_BEGIN';
+export const UPDATE_CASES_SUCCESS = 'UPDATE_CASES_SUCCESS';
+export const UPDATE_CASES_FAILURE = 'UPDATE_CASES_FAILURE';
 
 export const fetchCasesBegin = () => ({
   type: FETCH_CASES_BEGIN
@@ -15,3 +19,52 @@ export const fetchCasesFailure = error => ({
   type: FETCH_CASES_FAILURE,
   payload: { error }
 });
+
+export const updateCasesBegin = () => ({
+  type: UPDATE_CASES_BEGIN
+});
+
+export const updateCasesSuccess = updatedCase => ({
+  type: UPDATE_CASES_SUCCESS,
+  payload: { updatedCase }
+});
+
+export const updateCasesFailure = error => ({
+  type: UPDATE_CASES_FAILURE,
+  payload: { error }
+});
+
+export const fetchCases = () => {
+  return dispatch => {
+    dispatch(fetchCasesBegin());
+
+    axios
+      .get('/cases')
+      .then(response => {
+        console.log(response);
+        dispatch(fetchCasesSuccess(response.data));
+      })
+      .catch(function(error) {
+        console.log(error);
+        dispatch(fetchCasesFailure(error));
+      });
+  };
+};
+
+export const updateCases = data => {
+  return dispatch => {
+    dispatch(updateCasesBegin());
+
+    console.log('final_data', data);
+    axios
+      .put('/cases', data)
+      .then(response => {
+        console.log(response);
+        dispatch(updateCasesSuccess(response.data));
+      })
+      .catch(function(error) {
+        console.log(error);
+        dispatch(updateCasesFailure(error));
+      });
+  };
+};

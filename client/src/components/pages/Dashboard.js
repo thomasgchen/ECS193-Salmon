@@ -1,14 +1,12 @@
 import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Entries from '../Entries';
 
 export class Dashboard extends Component {
   render() {
     return (
       <div>
         <p>Dashboard</p>
-        <Entries />
         <ul>
           <li>
             <Link to="/">Dashboard</Link>
@@ -28,4 +26,5 @@ export class Dashboard extends Component {
 const mapStateToProps = state => {
   return { test: state.test };
 };
+
 export default connect(mapStateToProps)(Dashboard);

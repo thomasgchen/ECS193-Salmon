@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Entry from '../Entries';
 
 export class DataEntry extends Component {
   render() {
     return (
       <div>
         <p>Entry</p>
-        <p>Test: {this.props.test}</p>
+        <Entry />
         <ul>
           <li>
             <Link to="/">Dashboard</Link>
@@ -27,4 +28,5 @@ export class DataEntry extends Component {
 const mapStateToProps = state => {
   return { test: state.test };
 };
+
 export default connect(mapStateToProps)(DataEntry);
