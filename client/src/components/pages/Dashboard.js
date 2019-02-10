@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Entries from '../Entries';
 
 export class Dashboard extends Component {
   render() {
     return (
       <div>
         <p>Dashboard</p>
-        <p>Test: {this.props.test}</p>
+        <Entries />
         <ul>
           <li>
             <Link to="/">Dashboard</Link>

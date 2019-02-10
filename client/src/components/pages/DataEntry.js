@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-export class Entry extends Component {
+export class DataEntry extends Component {
   render() {
     return (
       <div>
@@ -27,4 +27,4 @@ export class Entry extends Component {
 const mapStateToProps = state => {
   return { test: state.test };
 };
-export default connect(mapStateToProps)(Entry);
+export default connect(mapStateToProps)(DataEntry);
