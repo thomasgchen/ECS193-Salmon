@@ -7,15 +7,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
 import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
-import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
   root: {
-    // flexGrow: 1,
     margin: theme.spacing.unit * 2,
     marginLeft: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit * 2,
-    borderBottom: '3px solid #F4BBB8'
+    paddingBottom: theme.spacing.unit * 2
   },
   idCell: {
     textAlign: 'center',

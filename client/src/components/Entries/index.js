@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchCases, updateCases } from '../../redux/actions/cases';
 import EntryItem from './EntryItem';
 import _ from 'lodash';
+import { CenteredProgress } from '../Progress';
 
 export class Entries extends Component {
   componentDidMount() {
@@ -26,7 +27,7 @@ export class Entries extends Component {
     if (items === undefined || items === null || items.length === 0) {
       return (
         <div>
-          {loading ? <p>loading...</p> : <p>No items in db.</p>}
+          {loading ? <CenteredProgress /> : <p>No items in db.</p>}
           {error && <p>{error}</p>}
         </div>
       );
