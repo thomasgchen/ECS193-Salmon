@@ -19,6 +19,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/cases', db.getCases);
+app.post('/cases', db.createCase);
+app.delete('/cases', db.destroyCase);
+app.put('/cases', db.updateCase);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
