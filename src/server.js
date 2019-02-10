@@ -1,8 +1,22 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const Sequelize = require('sequelize');
 
 const app = express();
-const PORT = process.env.port || 5000;
+const PORT = process.env.PORT || 5000;
+const connectionString = process.env.PGCONNECTSTRING;
+const sequelize = new Sequelize(connectionString);
+
+sequelize
+  .authenticate()
+  .then(() => {
+    // eslint-disable-next-line no-console
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    // eslint-disable-next-line no-console
+    console.error('Unable to connect to the database:', err);
+  });
 
 app.use(bodyParser.json());
 
