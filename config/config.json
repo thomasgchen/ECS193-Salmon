@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "tchen",
+    "password": null,
+    "database": "ecs193_database_development",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "tchen",
+    "password": null,
+    "database": "ecs193_database_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "tchen",
+    "password": null,
+    "database": "ecs193_database_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
