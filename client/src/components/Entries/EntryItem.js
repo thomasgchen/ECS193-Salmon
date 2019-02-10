@@ -31,7 +31,7 @@ export class EntryItem extends Component {
     const { changes } = this.state;
     let update_object = {};
     fields.map(field => {
-      update_object[field.name] = changes[field.name] || field.value;
+      return (update_object[field.name] = changes[field.name] || field.value);
     });
 
     this.setState({ changes: {}, isEditing: false });
