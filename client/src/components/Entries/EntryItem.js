@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
@@ -70,6 +71,12 @@ export class EntryItem extends Component {
     this.setState({ isEditing: true });
   };
 
+  handleDeletePress = event => {
+    const { handleDelete, id } = this.props;
+    event.preventDefault();
+    handleDelete(id);
+  };
+
   handleMouseEnter = () => {
     this.setState({ isHovering: true });
   };
@@ -117,20 +124,26 @@ export class EntryItem extends Component {
           </Grid>
         </Grid>
         <Grid item xs={1} className={classes.idCell}>
-          {isEditing && !isHeader && (
+          {isEditing && (
             <IconButton aria-label="Delete" onClick={this.handleClearChanges}>
               <CloseIcon />
             </IconButton>
           )}
-          {isEditing && !isHeader && (
+          {isEditing && (
             <IconButton aria-label="Check" onClick={this.handleSubmitChanges}>
               <CheckIcon />
             </IconButton>
           )}
           {!isEditing && !isHeader && isHovering && (
-            <IconButton aria-label="Edit" onClick={this.handleEditPress}>
-              <EditIcon />
-            </IconButton>
+            <span>
+              <IconButton aria-label="Edit" onClick={this.handleEditPress}>
+                <EditIcon />
+              </IconButton>
+              {/* TODO: confirmation dialog */}
+              <IconButton aria-label="Delete" onClick={this.handleDeletePress}>
+                <DeleteIcon />
+              </IconButton>
+            </span>
           )}
         </Grid>
       </Grid>
@@ -149,7 +162,7 @@ EntryItem.propTypes = {
     })
   ).isRequired,
   isLoading: PropTypes.bool, // If true show loading icon
-  isHeader: PropTypes.bool, // If true only display the fields name's not value
+  handleUpdate: PropTypes.func.isRequired,
   handleUpdate: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired
 };

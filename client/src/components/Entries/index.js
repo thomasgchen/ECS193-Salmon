@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchCases, updateCases } from '../../redux/actions/cases';
+import { fetchCases, updateCase, deleteCase } from '../../redux/actions/cases';
 import EntryItem from './EntryItem';
 import _ from 'lodash';
 import { CenteredProgress } from '../Progress';
@@ -19,7 +19,12 @@ export class Entries extends Component {
   };
 
   handleUpdate = (id, data) => {
-    this.props.updateCases({ ...data, id });
+    this.props.updateCase({ ...data, id });
+  };
+
+  handleDelete = id => {
+    console.log('deleting');
+    this.props.deleteCase(id);
   };
 
   render() {
@@ -38,9 +43,10 @@ export class Entries extends Component {
             return (
               <EntryItem
                 id={item.id}
-                key={item.id}
+                key={item.id + item.caseNum}
                 fields={this.structuredFields(item)}
                 handleUpdate={this.handleUpdate}
+                handleDelete={this.handleDelete}
               />
             );
           })}
@@ -57,7 +63,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchCases: () => dispatch(fetchCases()),
-    updateCases: (id, data) => dispatch(updateCases(id, data))
+    deleteCase: id => dispatch(deleteCase(id)),
+    updateCase: (id, data) => dispatch(updateCase(id, data))
   };
 };
 

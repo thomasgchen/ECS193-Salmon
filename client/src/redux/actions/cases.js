@@ -5,6 +5,9 @@ export const FETCH_CASES_FAILURE = 'FETCH_CASES_FAILURE';
 export const UPDATE_CASES_BEGIN = 'UPDATE_CASES_BEGIN';
 export const UPDATE_CASES_SUCCESS = 'UPDATE_CASES_SUCCESS';
 export const UPDATE_CASES_FAILURE = 'UPDATE_CASES_FAILURE';
+export const DELETE_CASES_BEGIN = 'DELETE_CASES_BEGIN';
+export const DELETE_CASES_SUCCESS = 'DELETE_CASES_SUCCESS';
+export const DELETE_CASES_FAILURE = 'DELETE_CASES_FAILURE';
 
 export const fetchCasesBegin = () => ({
   type: FETCH_CASES_BEGIN
@@ -34,6 +37,20 @@ export const updateCasesFailure = error => ({
   payload: { error }
 });
 
+export const deleteCasesBegin = () => ({
+  type: DELETE_CASES_BEGIN
+});
+
+export const deleteCasesSuccess = id => ({
+  type: DELETE_CASES_SUCCESS,
+  payload: { id }
+});
+
+export const deleteCasesFailure = error => ({
+  type: DELETE_CASES_FAILURE,
+  payload: { error }
+});
+
 export const fetchCases = () => {
   return dispatch => {
     dispatch(fetchCasesBegin());
@@ -51,11 +68,10 @@ export const fetchCases = () => {
   };
 };
 
-export const updateCases = data => {
+export const updateCase = data => {
   return dispatch => {
     dispatch(updateCasesBegin());
 
-    console.log('final_data', data);
     axios
       .put('/cases', data)
       .then(response => {
@@ -65,6 +81,21 @@ export const updateCases = data => {
       .catch(function(error) {
         console.log(error);
         dispatch(updateCasesFailure(error));
+      });
+  };
+};
+
+export const deleteCase = id => {
+  return dispatch => {
+    dispatch(deleteCasesBegin());
+
+    axios
+      .delete('/cases', { data: { id } })
+      .then(response => {
+        dispatch(deleteCasesSuccess(response.data.id));
+      })
+      .catch(function(error) {
+        dispatch(deleteCasesFailure(error));
       });
   };
 };

@@ -49,7 +49,7 @@ const destroyCase = (req, res) => {
       foundCase
         .destroy()
         .then(() => {
-          res.status(204).json({ message: 'Case destroyed' });
+          res.status(200).json({ message: 'Case destroyed', id: req.body.id });
         })
         .catch(error => {
           res.status(500).send(error);

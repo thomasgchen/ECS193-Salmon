@@ -4,7 +4,10 @@ import {
   FETCH_CASES_FAILURE,
   UPDATE_CASES_BEGIN,
   UPDATE_CASES_SUCCESS,
-  UPDATE_CASES_FAILURE
+  UPDATE_CASES_FAILURE,
+  DELETE_CASES_BEGIN,
+  DELETE_CASES_SUCCESS,
+  DELETE_CASES_FAILURE
 } from '../actions/cases';
 
 const initialState = {
@@ -61,6 +64,29 @@ export default function cases(state = initialState, action) {
       };
 
     case UPDATE_CASES_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error
+      };
+
+    case DELETE_CASES_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+
+    case DELETE_CASES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        items: state.items.filter((value, index, arr) => {
+          return value.id !== action.payload.id;
+        })
+      };
+
+    case DELETE_CASES_FAILURE:
       return {
         ...state,
         loading: false,
