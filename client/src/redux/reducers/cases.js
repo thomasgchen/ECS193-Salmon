@@ -52,15 +52,14 @@ export default function cases(state = initialState, action) {
       };
 
     case UPDATE_CASES_SUCCESS:
-      const id = action.payload.updatedCase.id;
-      const prunedItems = state.items.filter((value, index, arr) => {
-        return value.id !== id;
-      });
+      const updatedItems = state.items;
+      const caseIndex = state.items.findIndex(x => x.id === action.payload.updatedCase.id);
+      updatedItems[caseIndex] = action.payload.updatedCase;
 
       return {
         ...state,
         loading: false,
-        items: [...prunedItems, action.payload.updatedCase]
+        items: updatedItems
       };
 
     case UPDATE_CASES_FAILURE:

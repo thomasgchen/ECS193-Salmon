@@ -18,6 +18,7 @@ sequelize
 const getCases = page => {
   const limit = 50;
   return models.Case.findAll({
+    order: [['id', 'ASC']],
     limit,
     offset: limit * (page || 0),
     attributes: { exclude: ['createdAt', 'updatedAt', 'LocationId'] },
@@ -73,7 +74,14 @@ const updateCase = (req, res) => {
       foundCase
         .update(req.body)
         .then(updatedCase => {
-          res.status(200).json(updatedCase);
+          models.Case.findOne({
+            where: { id: updatedCase.id },
+            attributes: { exclude: ['createdAt', 'updatedAt', 'LocationId'] },
+            include: [{ model: models.Location, attributes: ['name'] }],
+            raw: true
+          }).then(caseObj => {
+            res.status(200).json(caseObj);
+          });
         })
         .catch(error => {
           res.status(500).send(error);

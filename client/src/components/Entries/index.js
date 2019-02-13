@@ -7,6 +7,8 @@ import _ from 'lodash';
 import { CenteredProgress } from '../Progress';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+const recordsPerPage = 50; // Make sure this matches the endpoint
+
 export class Entries extends Component {
   constructor(props) {
     super(props);
@@ -46,6 +48,7 @@ export class Entries extends Component {
 
   render() {
     const { error, loading, items } = this.props.cases;
+    const { page } = this.state;
     if (items === undefined || items === null || items.length === 0) {
       return (
         <div>
@@ -56,7 +59,7 @@ export class Entries extends Component {
     } else {
       return (
         <div>
-          {items.map(item => {
+          {items.slice(0, recordsPerPage * (page + 1)).map(item => {
             return (
               <EntryItem
                 id={item.id}
