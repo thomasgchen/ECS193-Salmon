@@ -28,7 +28,7 @@ export class Preview extends Component {
       return (
         <div>
           {loading ? <CenteredProgress /> : <p>No items in db.</p>}
-          {error && <p>{error}</p>}
+          {error && <p>{String(error)}</p>}
         </div>
       );
     } else {

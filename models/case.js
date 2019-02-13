@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     comments: DataTypes.STRING
   });
   Case.associate = models => {
-    Case.hasOne(models.Location);
+    Case.belongsTo(models.Location);
   };
   return Case;
 };

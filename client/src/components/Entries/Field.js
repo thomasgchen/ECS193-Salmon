@@ -54,7 +54,6 @@ export class Field extends Component {
     } else {
       return (
         <Paper className={classes.root}>
-          {' '}
           <Typography noWrap className={classes.header}>
             {name}
           </Typography>

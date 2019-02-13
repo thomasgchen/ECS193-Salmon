@@ -18,7 +18,15 @@ app.get('/', (req, res) => {
   res.json({ info: 'Node.js, Express, and Postgres API' });
 });
 
-app.get('/cases', db.getCases);
+app.get('/cases', (req, res) => {
+  db.getCases(req.param('page'))
+    .then(cases => {
+      res.status(200).json(cases);
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
 app.post('/cases', db.createCase);
 app.delete('/cases', db.destroyCase);
 app.put('/cases', db.updateCase);

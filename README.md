@@ -6,7 +6,8 @@
 4. Create db `npm run db:create`
 5. Run migrations `npm run db:migrate`
 
-To Run: `npm run dev` & navigate to localhost:3000
+To Run: `npm run dev` & navigate to localhost:3000  
+To open REPL: `npm run repl`
 
 ## Example .env
 

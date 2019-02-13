@@ -51,12 +51,12 @@ export const deleteCasesFailure = error => ({
   payload: { error }
 });
 
-export const fetchCases = () => {
+export const fetchCases = page => {
   return dispatch => {
     dispatch(fetchCasesBegin());
 
     axios
-      .get('/cases')
+      .get('/cases', { params: { page } })
       .then(response => {
         console.log(response);
         dispatch(fetchCasesSuccess(response.data));

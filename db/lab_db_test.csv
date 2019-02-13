@@ -1,0 +1,6 @@
+﻿caseNum,date,confidence,species,age,pathogen,numFish,fish,numPositive,prevalence,comments,location,latitude,longitude
+C87-001,9/24/07,High,CHIN,adult,IHN,30,TRUE,27,0.9,SCS,"Trinity River, California",41.184532,-123.706795
+C87-002,10/2/07,High,CHIN,adult,IHN,30,TRUE,20,0.666666667,SCS,"Trinity River, California",41.184532,-123.706795
+C87-003,10/9/07,High,CHIN,adult,IHN,30,TRUE,26,0.866666667,SCS,"Trinity River, California",41.184532,-123.706795
+C87-004,10/16/07,High,CHIN,adult,IHN,10,TRUE,10,1,FCS,"Trinity River, California",41.184532,-123.706795
+C87-005A,10/15/07,High,KOK,adult,,60,TRUE,0,0,,"Taylor Creek, California",38.93420029,-120.0561676

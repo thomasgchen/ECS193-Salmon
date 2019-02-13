@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 const Sequelize = require('sequelize');
 // eslint-disable-next-line no-unused-vars
-const Case = require('../models/case');
 const models = require('../models/index');
 
 const connectionString = process.env.PGCONNECTSTRING;
@@ -16,14 +15,15 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-const getCases = (req, res) => {
-  models.Case.findAll({ attributes: { exclude: ['createdAt', 'updatedAt'] } })
-    .then(cases => {
-      res.status(200).json(cases);
-    })
-    .catch(err => {
-      res.status(500).send(err);
-    });
+const getCases = page => {
+  const limit = 50;
+  return models.Case.findAll({
+    limit,
+    offset: limit * (page || 0),
+    attributes: { exclude: ['createdAt', 'updatedAt', 'LocationId'] },
+    include: [{ model: models.Location, attributes: ['name'] }],
+    raw: true
+  });
 };
 
 const createCase = (req, res) => {

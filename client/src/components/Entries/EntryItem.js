@@ -8,6 +8,8 @@ import CheckIcon from '@material-ui/icons/Check';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Grid from '@material-ui/core/Grid';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; // CSS for confirm alert
 
 const styles = theme => ({
   root: {
@@ -71,10 +73,23 @@ export class EntryItem extends Component {
     this.setState({ isEditing: true });
   };
 
-  handleDeletePress = event => {
-    const { handleDelete, id } = this.props;
-    event.preventDefault();
-    handleDelete(id);
+  handleDeletePress = () => {
+    confirmAlert({
+      title: 'Confirm to delete',
+      message: 'Are you sure you want to do this.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            const { handleDelete, id } = this.props;
+            handleDelete(id);
+          }
+        },
+        {
+          label: 'No'
+        }
+      ]
+    });
   };
 
   handleMouseEnter = () => {

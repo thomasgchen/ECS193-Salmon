@@ -8,19 +8,6 @@ export class DataEntry extends Component {
   render() {
     return (
       <div style={{ margin: 0 }}>
-        <div style={{ backgroundColor: 'lightGrey', height: '15vh' }}>
-          <ul>
-            <li>
-              <Link to="/">Dashboard</Link>
-            </li>
-            <li>
-              <Link to="/entry">Data Entry</Link>
-            </li>
-            <li>
-              <Link to="/explorer">Data Explorer</Link>
-            </li>
-          </ul>
-        </div>
         <div
           style={{
             height: '85vh',
@@ -44,6 +31,19 @@ export class DataEntry extends Component {
           }}
         >
           <Preview />
+        </div>
+        <div style={{ backgroundColor: 'lightGrey', height: '15vh' }}>
+          <ul>
+            <li>
+              <Link to="/">Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/entry">Data Entry</Link>
+            </li>
+            <li>
+              <Link to="/explorer">Data Explorer</Link>
+            </li>
+          </ul>
         </div>
       </div>
     );
