@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 // eslint-disable-next-line no-unused-vars
 const models = require('../models/index');
 
-const connectionString = process.env.PGCONNECTSTRING;
+const connectionString = process.env.DATABASE_URL;
 const sequelize = new Sequelize(connectionString);
 
 sequelize

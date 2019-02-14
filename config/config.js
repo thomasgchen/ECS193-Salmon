@@ -1,25 +1,30 @@
 require('dotenv').load();
 
+// eslint-disable-next-line prefer-destructuring
+const parse = require('pg-connection-string').parse;
+
+const config = parse(process.env.DATABASE_URL);
+
 module.exports = {
   development: {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOSTNAME,
+    username: config.user,
+    password: config.password,
+    database: config.databse,
+    host: config.host,
     dialect: 'postgres'
   },
   test: {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOSTNAME,
+    username: config.user,
+    password: config.password,
+    database: config.databse,
+    host: config.host,
     dialect: 'postgres'
   },
   production: {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOSTNAME,
+    username: config.user,
+    password: config.password,
+    database: config.databse,
+    host: config.host,
     dialect: 'postgres'
   }
 };
