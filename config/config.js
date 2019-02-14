@@ -9,21 +9,21 @@ module.exports = {
   development: {
     username: config.user,
     password: config.password,
-    database: config.databse,
+    database: config.database,
     host: config.host,
     dialect: 'postgres'
   },
   test: {
     username: config.user,
     password: config.password,
-    database: config.databse,
+    database: config.database,
     host: config.host,
     dialect: 'postgres'
   },
   production: {
     username: config.user,
     password: config.password,
-    database: config.databse,
+    database: config.database,
     host: config.host,
     dialect: 'postgres'
   }
