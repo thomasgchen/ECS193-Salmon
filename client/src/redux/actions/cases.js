@@ -9,6 +9,10 @@ export const DELETE_CASES_BEGIN = 'DELETE_CASES_BEGIN';
 export const DELETE_CASES_SUCCESS = 'DELETE_CASES_SUCCESS';
 export const DELETE_CASES_FAILURE = 'DELETE_CASES_FAILURE';
 
+if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
+  axios.defaults.baseURL = 'https://salmon-health.herokuapp.com/';
+}
+
 export const fetchCasesBegin = () => ({
   type: FETCH_CASES_BEGIN
 });
