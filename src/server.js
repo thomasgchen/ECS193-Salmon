@@ -20,8 +20,24 @@ app.get('/', (req, res) => {
   res.json({ info: 'Node.js, Express, and Postgres API' });
 });
 
+app.get('/locations', (req, res) => {
+  db.getLocations()
+    .then(locations => {
+      res.status(200).json(locations);
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
 app.get('/cases', (req, res) => {
-  db.getCases(req.param('page'))
+  const filter = {};
+  const validFilters = ['species', 'age', 'locationId'];
+  validFilters.forEach(f => {
+    if (req.param(f) && req.param(f) !== '') filter[f] = req.param(f);
+  });
+
+  db.getCases(req.param('page'), filter)
     .then(cases => {
       res.status(200).json(cases);
     })

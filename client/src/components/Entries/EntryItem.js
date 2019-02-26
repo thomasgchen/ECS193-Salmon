@@ -118,7 +118,7 @@ export class EntryItem extends Component {
         <Grid item xs={10}>
           <Grid container spacing={8}>
             {fields.map(field => {
-              if (field.name === 'id') return;
+              if (field.name === 'id') return <div />;
               return (
                 <Grid item xs={2}>
                   <Field
@@ -154,7 +154,6 @@ export class EntryItem extends Component {
               <IconButton aria-label="Edit" onClick={this.handleEditPress}>
                 <EditIcon />
               </IconButton>
-              {/* TODO: confirmation dialog */}
               <IconButton aria-label="Delete" onClick={this.handleDeletePress}>
                 <DeleteIcon />
               </IconButton>
@@ -177,7 +176,6 @@ EntryItem.propTypes = {
     })
   ).isRequired,
   isLoading: PropTypes.bool, // If true show loading icon
-  handleUpdate: PropTypes.func.isRequired,
   handleUpdate: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired
 };

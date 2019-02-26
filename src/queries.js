@@ -15,9 +15,16 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-const getCases = page => {
+const getLocations = () => {
+  return models.Location.findAll({
+    raw: true
+  });
+};
+
+const getCases = (page, query) => {
   const limit = 50;
   return models.Case.findAll({
+    where: query,
     order: [['id', 'ASC']],
     limit,
     offset: limit * (page || 0),
@@ -93,6 +100,7 @@ const updateCase = (req, res) => {
 };
 
 module.exports = {
+  getLocations,
   getCases,
   createCase,
   destroyCase,

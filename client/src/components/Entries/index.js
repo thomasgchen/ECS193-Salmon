@@ -25,7 +25,7 @@ export class Entries extends Component {
   structuredFields = item => {
     let row = [];
     _.mapKeys(item, (value, key) => {
-      row.push({ name: key, value: String(value), formType: 'string' });
+      row.push({ name: key, value: String(value), formType: key === 'age' ? 'select' : 'string' });
     });
     return row;
   };
