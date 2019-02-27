@@ -143,7 +143,8 @@ function Menu(props) {
   );
 }
 
-function SelectField({ theme, name, value, onChange, classes }) {
+function SelectField({ theme, name, value, onChange, classes, options }) {
+  if (name === 'location') console.log(name, value);
   const selectStyles = {
     input: base => ({
       ...base,
@@ -155,9 +156,13 @@ function SelectField({ theme, name, value, onChange, classes }) {
   };
 
   let suggestions = [];
-  if (name === 'age') suggestions = VALID_AGES;
-  else if (name === 'pathogen') suggestions = VALID_PATHOGENS;
-  else if (name === 'species') suggestions = VALID_SPECIES;
+  if (options) {
+    suggestions = options;
+  } else {
+    if (name === 'age') suggestions = VALID_AGES;
+    else if (name === 'pathogen') suggestions = VALID_PATHOGENS;
+    else if (name === 'species') suggestions = VALID_SPECIES;
+  }
 
   return (
     <div className={classes.root}>
@@ -194,7 +199,8 @@ SelectField.propTypes = {
   theme: PropTypes.object,
   name: PropTypes.string,
   currentValue: PropTypes.string,
-  handleChange: PropTypes.func
+  handleChange: PropTypes.func,
+  options: PropTypes.array // Optional list of options (overides options geussing based on name)
 };
 
 export default withStyles(styles, { withTheme: true })(SelectField);

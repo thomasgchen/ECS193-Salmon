@@ -28,7 +28,7 @@ const getCases = (page, query) => {
     order: [['id', 'ASC']],
     limit,
     offset: limit * (page || 0),
-    attributes: { exclude: ['createdAt', 'updatedAt', 'LocationId'] },
+    attributes: { exclude: ['createdAt', 'updatedAt'] },
     include: [{ model: models.Location, attributes: ['name'] }],
     raw: true
   });
@@ -83,7 +83,7 @@ const updateCase = (req, res) => {
         .then(updatedCase => {
           models.Case.findOne({
             where: { id: updatedCase.id },
-            attributes: { exclude: ['createdAt', 'updatedAt', 'LocationId'] },
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
             include: [{ model: models.Location, attributes: ['name'] }],
             raw: true
           }).then(caseObj => {

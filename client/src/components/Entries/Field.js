@@ -43,20 +43,30 @@ export class Field extends Component {
   handleChange = event => {
     const { formType, handleChange, name } = this.props;
     // Call the parent's handle change which expects a key and value
-    console.log(event);
     if (formType === 'date') handleChange(name, event.format('MM/DD/YY'));
     else if (formType === 'select') handleChange(name, event.value);
     else handleChange(name, event.target.value);
   };
 
   render() {
-    const { name, value, currentValue, formType, isEditing, classes, theme } = this.props;
+    const {
+      name,
+      value,
+      currentValue,
+      formType,
+      isEditing,
+      classes,
+      theme,
+      label,
+      locations,
+      lookupTable
+    } = this.props;
     if (isEditing) {
       if (formType === 'date') {
         return (
           <DateField
             id={name}
-            name={name}
+            name={label}
             value={currentValue}
             onChange={this.handleChange}
             theme={theme}
@@ -66,9 +76,13 @@ export class Field extends Component {
         return (
           <SelectField
             id={name}
-            name={name}
-            value={{ label: currentValue, value: currentValue }}
+            name={label}
+            value={{
+              value: currentValue,
+              label: lookupTable ? lookupTable[currentValue] : currentValue
+            }}
             onChange={this.handleChange}
+            options={locations}
             theme={theme}
           />
         );
@@ -76,7 +90,7 @@ export class Field extends Component {
         return (
           <TextField
             id={name}
-            label={name}
+            label={label}
             className={classes.textField}
             value={currentValue}
             onChange={this.handleChange}
@@ -89,10 +103,10 @@ export class Field extends Component {
       return (
         <Paper className={classes.root}>
           <Typography noWrap className={classes.header}>
-            {name}
+            {label}
           </Typography>
           <Typography noWrap className={classes.value}>
-            {value}
+            {lookupTable ? lookupTable[value] : value}
           </Typography>
         </Paper>
       );
@@ -102,12 +116,15 @@ export class Field extends Component {
 
 Field.propTypes = {
   name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   currentValue: PropTypes.string.isRequired,
   formType: PropTypes.string.isRequired,
   isEditing: PropTypes.bool,
   classes: PropTypes.object.isRequired,
-  handleChange: PropTypes.func.isRequired
+  handleChange: PropTypes.func.isRequired,
+  locations: PropTypes.array,
+  lookupTable: PropTypes.object
 };
 
 export default withStyles(styles, { withTheme: true })(Field);

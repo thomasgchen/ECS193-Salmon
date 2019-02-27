@@ -4,7 +4,7 @@ import rootReducer from './reducers';
 import loggerMiddleware from './middleware/logger';
 
 const middleware = compose(
-  applyMiddleware(loggerMiddleware, thunkMiddleware),
+  applyMiddleware(thunkMiddleware),
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 

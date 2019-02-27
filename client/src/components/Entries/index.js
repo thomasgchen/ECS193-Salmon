@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { fetchCases, updateCase, deleteCase } from '../../redux/actions/cases';
+import { fetchLocations } from '../../redux/actions/locations';
 import EntryItem from './EntryItem';
 import _ from 'lodash';
 import { CenteredProgress } from '../Progress';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const recordsPerPage = 50; // Make sure this matches the endpoint
-const selectFields = ['age', 'pathogen', 'species'];
+const selectFields = ['age', 'pathogen', 'species', 'LocationId'];
 const dateFields = ['date'];
+const ignoredFields = ['Location.name'];
+const aliasedFields = { LocationId: 'location' };
+
 export class Entries extends Component {
   constructor(props) {
     super(props);
@@ -21,20 +25,25 @@ export class Entries extends Component {
   componentDidMount() {
     const { page } = this.state;
     this.props.fetchCases(page);
+    this.props.fetchLocations();
   }
 
   structuredFields = item => {
     let row = [];
     _.mapKeys(item, (value, key) => {
-      row.push({
-        name: key,
-        value: String(value),
-        formType: dateFields.includes(key)
-          ? 'date'
-          : selectFields.includes(key)
-          ? 'select'
-          : 'string'
-      });
+      if (!ignoredFields.includes(key)) {
+        if (key === 'Location.Id') console.log(String(value));
+        row.push({
+          label: aliasedFields[key] || key,
+          name: key,
+          value: String(value),
+          formType: dateFields.includes(key)
+            ? 'date'
+            : selectFields.includes(key)
+            ? 'select'
+            : 'string'
+        });
+      }
     });
     return row;
   };
@@ -56,8 +65,11 @@ export class Entries extends Component {
   };
 
   render() {
-    const { error, loading, items } = this.props.cases;
+    const { error, loading: casesLoading, items } = this.props.cases;
+    const { loading: locationsLoading, items: locations, lookup } = this.props.locations;
+    const loading = casesLoading || locationsLoading;
     const { page } = this.state;
+
     if (items === undefined || items === null || items.length === 0) {
       return (
         <div>
@@ -76,6 +88,7 @@ export class Entries extends Component {
                 fields={this.structuredFields(item)}
                 handleUpdate={this.handleUpdate}
                 handleDelete={this.handleDelete}
+                extraData={{ locations: locations, lookupTable: lookup }}
               />
             );
           })}
@@ -96,14 +109,15 @@ export class Entries extends Component {
 }
 
 const mapStateToProps = state => {
-  return { cases: state.cases };
+  return { cases: state.cases, locations: state.locations };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchCases: page => dispatch(fetchCases(page)),
     deleteCase: id => dispatch(deleteCase(id)),
-    updateCase: (id, data) => dispatch(updateCase(id, data))
+    updateCase: (id, data) => dispatch(updateCase(id, data)),
+    fetchLocations: () => dispatch(fetchLocations())
   };
 };
 

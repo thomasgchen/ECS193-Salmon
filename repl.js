@@ -22,3 +22,4 @@ const replServer = repl.start({});
 
 // attach modules to the repl context
 replServer.context.db = models;
+replServer.context.sequelize = sequelize;

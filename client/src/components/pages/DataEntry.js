@@ -7,24 +7,25 @@ import Preview from '../Preview';
 export class DataEntry extends Component {
   render() {
     return (
-      <div style={{ margin: 0 }}>
+      <div style={{ margin: 0, overflow: 'hidden', height: '100vh', width: '100vw' }}>
         <div
           style={{
-            height: '85vh',
-            width: '55vw',
+            height: '85%',
+            width: '65%',
             overflow: 'scroll',
             paddingTop: '10px',
             paddingRight: '10xpx',
-            display: 'inline-block'
+            display: 'inline-block',
+            overflowX: 'hidden'
           }}
         >
           <Entries />
         </div>
         <div
           style={{
-            height: '85vh',
-            width: '45vw',
-            overflow: 'scroll',
+            height: '85%',
+            width: '30%',
+            overflow: 'hidden',
             paddingTop: '10px',
             paddingRight: '10xpx',
             display: 'inline-block'
@@ -32,7 +33,7 @@ export class DataEntry extends Component {
         >
           <Preview />
         </div>
-        <div style={{ backgroundColor: 'lightGrey', height: '15vh' }}>
+        <div style={{ backgroundColor: 'lightGrey', height: '15%' }}>
           <ul>
             <li>
               <Link to="/">Dashboard</Link>
