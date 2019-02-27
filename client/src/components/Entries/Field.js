@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import SelectField from './SelectField';
+import DateField from './DateField';
 
 const styles = theme => ({
   root: {
@@ -40,16 +41,28 @@ const styles = theme => ({
 
 export class Field extends Component {
   handleChange = event => {
+    const { formType, handleChange, name } = this.props;
     // Call the parent's handle change which expects a key and value
     console.log(event);
-    if (this.props.formType === 'select') this.props.handleChange(this.props.name, event.value);
-    else this.props.handleChange(this.props.name, event.target.value);
+    if (formType === 'date') handleChange(name, event.format('MM/DD/YY'));
+    else if (formType === 'select') handleChange(name, event.value);
+    else handleChange(name, event.target.value);
   };
 
   render() {
     const { name, value, currentValue, formType, isEditing, classes, theme } = this.props;
     if (isEditing) {
-      if (formType === 'select') {
+      if (formType === 'date') {
+        return (
+          <DateField
+            id={name}
+            name={name}
+            value={currentValue}
+            onChange={this.handleChange}
+            theme={theme}
+          />
+        );
+      } else if (formType === 'select') {
         return (
           <SelectField
             id={name}

@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Select from 'react-select';
 import { withStyles } from '@material-ui/core/styles';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import { VALID_AGES } from '../../config/constants';
+import { VALID_AGES, VALID_PATHOGENS, VALID_SPECIES } from '../../config/constants';
 
 const styles = theme => ({
   root: {
@@ -156,6 +156,8 @@ function SelectField({ theme, name, value, onChange, classes }) {
 
   let suggestions = [];
   if (name === 'age') suggestions = VALID_AGES;
+  else if (name === 'pathogen') suggestions = VALID_PATHOGENS;
+  else if (name === 'species') suggestions = VALID_SPECIES;
 
   return (
     <div className={classes.root}>

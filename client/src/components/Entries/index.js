@@ -8,7 +8,8 @@ import { CenteredProgress } from '../Progress';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const recordsPerPage = 50; // Make sure this matches the endpoint
-
+const selectFields = ['age', 'pathogen', 'species'];
+const dateFields = ['date'];
 export class Entries extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +26,15 @@ export class Entries extends Component {
   structuredFields = item => {
     let row = [];
     _.mapKeys(item, (value, key) => {
-      row.push({ name: key, value: String(value), formType: key === 'age' ? 'select' : 'string' });
+      row.push({
+        name: key,
+        value: String(value),
+        formType: dateFields.includes(key)
+          ? 'date'
+          : selectFields.includes(key)
+          ? 'select'
+          : 'string'
+      });
     });
     return row;
   };
