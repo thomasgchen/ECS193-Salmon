@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Select from 'react-select';
-import { VALID_AGES, VALID_BREEDS } from '../../config/constants';
+import SelectField from './SelectField';
 
 const styles = theme => ({
   root: {
@@ -43,6 +41,7 @@ const styles = theme => ({
 export class Field extends Component {
   handleChange = event => {
     // Call the parent's handle change which expects a key and value
+    console.log(event);
     if (this.props.formType === 'select') this.props.handleChange(this.props.name, event.value);
     else this.props.handleChange(this.props.name, event.target.value);
   };
@@ -51,45 +50,13 @@ export class Field extends Component {
     const { name, value, currentValue, formType, isEditing, classes, theme } = this.props;
     if (isEditing) {
       if (formType === 'select') {
-        const selectStyles = {
-          container: base => ({
-            ...base,
-            width: '100%',
-            marginTop: theme.spacing.unit,
-            marginBottom: theme.spacing.unit,
-            marginLeft: theme.spacing.unit,
-            marginRight: theme.spacing.unit,
-            zIndex: '100000'
-          }),
-          valueContainer: base => ({
-            ...base,
-            opacity: 1
-          }),
-          input: base => ({
-            ...base,
-            color: theme.palette.text.primary,
-            '& input': {
-              font: 'inherit'
-            }
-          })
-        };
         return (
-          <OutlinedInput
-            className={classes.outlinedShell}
-            notched
-            label={name}
-            inputComponent={() => (
-              <Select
-                className="basic-single"
-                classNamePrefix="select"
-                styles={selectStyles}
-                isSearchable="true"
-                name={name}
-                value={{ label: currentValue, value: currentValue }}
-                onChange={this.handleChange}
-                options={VALID_AGES}
-              />
-            )}
+          <SelectField
+            id={name}
+            name={name}
+            value={{ label: currentValue, value: currentValue }}
+            onChange={this.handleChange}
+            theme={theme}
           />
         );
       } else {
@@ -101,7 +68,7 @@ export class Field extends Component {
             value={currentValue}
             onChange={this.handleChange}
             margin="normal"
-            variant="outlined"
+            // variant="outlined"
           />
         );
       }

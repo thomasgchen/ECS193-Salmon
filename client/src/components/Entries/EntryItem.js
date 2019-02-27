@@ -105,6 +105,7 @@ export class EntryItem extends Component {
     const { isEditing, changes, isHovering } = this.state;
     return (
       <Grid
+        key={`entryitem-${id}`}
         container
         className={classes.root}
         onMouseEnter={this.handleMouseEnter}
@@ -118,9 +119,9 @@ export class EntryItem extends Component {
         <Grid item xs={10}>
           <Grid container spacing={8}>
             {fields.map(field => {
-              if (field.name === 'id') return <div />;
+              if (field.name === 'id') return <div key={`id-${id}`} />;
               return (
-                <Grid item xs={2}>
+                <Grid item xs={2} key={`${field.name}-${id}`}>
                   <Field
                     key={field.name}
                     name={field.name}
