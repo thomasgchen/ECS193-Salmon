@@ -20,7 +20,7 @@ export class Entries extends Component {
     super(props);
     this.state = {
       page: 0,
-      filters: { value: {}, raw: {} }
+      filters: {}
     };
   }
 
@@ -32,10 +32,10 @@ export class Entries extends Component {
   fetchCasesBasedOnState() {
     const { filters, page } = this.state;
     const { fetchCases, fetchFilteredCases } = this.props;
-    if (_.isEmpty(filters.value)) {
+    if (_.isEmpty(filters)) {
       fetchCases(page);
     } else {
-      fetchFilteredCases(filters.value, page);
+      fetchFilteredCases(filters, page);
     }
   }
 
@@ -80,11 +80,11 @@ export class Entries extends Component {
     let newFilters;
     if (name !== 'clear') {
       newFilters = {
-        value: { ...filters.value, [name]: event.value },
-        raw: { ...filters.raw, [name]: event.value }
+        ...filters,
+        [name]: event.value
       };
     } else {
-      newFilters = { value: {}, raw: {} };
+      newFilters = {};
     }
 
     this.setState({ filters: newFilters }, () => {
@@ -112,7 +112,7 @@ export class Entries extends Component {
           <Filters
             locations={locations}
             handleFilterChange={this.handleFilterChange}
-            values={filters.raw}
+            values={filters}
           />
           {items.slice(0, recordsPerPage * (page + 1)).map(item => {
             return (

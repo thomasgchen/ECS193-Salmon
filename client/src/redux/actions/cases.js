@@ -68,11 +68,9 @@ export const fetchCases = page => {
     axios
       .get('/cases', { params: { page } })
       .then(response => {
-        console.log(response);
         dispatch(fetchCasesSuccess(response.data));
       })
       .catch(function(error) {
-        console.log(error);
         dispatch(fetchCasesFailure(error));
       });
   };
@@ -85,11 +83,9 @@ export const fetchFilteredCases = (filters, page) => {
     axios
       .get('/cases', { params: { ...filters, page } })
       .then(response => {
-        console.log(response);
         dispatch(fetchFilteredCasesSuccess(response.data));
       })
       .catch(function(error) {
-        console.log(error);
         dispatch(fetchCasesFailure(error));
       });
   };
@@ -102,11 +98,9 @@ export const updateCase = data => {
     axios
       .put('/cases', data)
       .then(response => {
-        console.log(response);
         dispatch(updateCasesSuccess(response.data));
       })
       .catch(function(error) {
-        console.log(error);
         dispatch(updateCasesFailure(error));
       });
   };

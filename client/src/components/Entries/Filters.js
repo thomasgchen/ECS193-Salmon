@@ -18,7 +18,7 @@ function Filters({ locations, handleFilterChange, classes, values }) {
       <Grid item xs={2}>
         <SelectField
           name="age"
-          currentValue={values.age || ''}
+          value={values.age ? values.age.value : ''}
           onChange={event => {
             handleFilterChange('age', event);
           }}
@@ -27,7 +27,7 @@ function Filters({ locations, handleFilterChange, classes, values }) {
       <Grid item xs={2}>
         <SelectField
           name="pathogen"
-          currentValue={values.pathogen || ''}
+          value={values.pathogen ? values.pathogen.value : ''}
           onChange={event => {
             handleFilterChange('pathogen', event);
           }}
@@ -36,7 +36,7 @@ function Filters({ locations, handleFilterChange, classes, values }) {
       <Grid item xs={2}>
         <SelectField
           name="species"
-          currentValue={values.species || ''}
+          value={values.species ? values.species.value : ''}
           onChange={event => {
             handleFilterChange('species', event);
           }}
@@ -46,7 +46,7 @@ function Filters({ locations, handleFilterChange, classes, values }) {
         <SelectField
           name="LocationId"
           label="location"
-          currentValue={values.LocationId || ''}
+          value={values.LocationId ? values.LocationId.value : ''}
           onChange={event => {
             handleFilterChange('LocationId', event);
           }}
