@@ -7,12 +7,14 @@ import {
   UPDATE_CASES_FAILURE,
   DELETE_CASES_BEGIN,
   DELETE_CASES_SUCCESS,
-  DELETE_CASES_FAILURE
+  DELETE_CASES_FAILURE,
+  FETCH_FILTERED_CASES_SUCCESS
 } from '../actions/cases';
 
 const initialState = {
   items: [],
   loading: false,
+  filtered: false,
   error: null
 };
 
@@ -30,12 +32,45 @@ export default function cases(state = initialState, action) {
       const prunedFetchedItems = state.items.filter((value, index, arr) => {
         return !ids.includes(value.id);
       });
+      if (!state.filtered) {
+        return {
+          ...state,
+          loading: false,
+          filtered: false,
+          items: [...prunedFetchedItems, ...action.payload.cases]
+        };
+      } else {
+        return {
+          ...state,
+          loading: false,
+          filtered: false,
+          items: [...action.payload.cases]
+        };
+      }
 
-      return {
-        ...state,
-        loading: false,
-        items: [...prunedFetchedItems, ...action.payload.cases]
-      };
+    case FETCH_FILTERED_CASES_SUCCESS:
+      // if (state.filtered === false) {
+      if (true) {
+        // previous results were not filtered (reset)
+        return {
+          ...state,
+          loading: false,
+          filtered: true,
+          items: [...action.payload.cases]
+        };
+      } else {
+        const ids = action.payload.cases.map(c => c.id);
+        const prunedFetchedItems = state.items.filter((value, index, arr) => {
+          return !ids.includes(value.id);
+        });
+
+        return {
+          ...state,
+          loading: false,
+          filtered: true,
+          items: [...prunedFetchedItems, ...action.payload.cases]
+        };
+      }
 
     case FETCH_CASES_FAILURE:
       return {

@@ -143,7 +143,7 @@ function Menu(props) {
   );
 }
 
-function SelectField({ theme, name, value, onChange, classes, options }) {
+function SelectField({ theme, name, value, onChange, classes, options, label }) {
   if (name === 'location') console.log(name, value);
   const selectStyles = {
     input: base => ({
@@ -173,9 +173,9 @@ function SelectField({ theme, name, value, onChange, classes, options }) {
         components={components}
         value={value}
         onChange={onChange}
-        placeholder={name}
+        placeholder={label || name}
         textFieldProps={{
-          label: name,
+          label: label || name,
           InputLabelProps: {
             shrink: true
           }
@@ -197,6 +197,7 @@ const components = {
 
 SelectField.propTypes = {
   theme: PropTypes.object,
+  label: PropTypes.string,
   name: PropTypes.string,
   currentValue: PropTypes.string,
   handleChange: PropTypes.func,

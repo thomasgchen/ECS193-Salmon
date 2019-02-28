@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { fetchCases, updateCase, deleteCase } from '../../redux/actions/cases';
+import { fetchCases, fetchFilteredCases, updateCase, deleteCase } from '../../redux/actions/cases';
 import { fetchLocations } from '../../redux/actions/locations';
 import EntryItem from './EntryItem';
+import Filters from './Filters';
 import _ from 'lodash';
 import { CenteredProgress } from '../Progress';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -18,14 +19,24 @@ export class Entries extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: 0
+      page: 0,
+      filters: { value: {}, raw: {} }
     };
   }
 
   componentDidMount() {
-    const { page } = this.state;
-    this.props.fetchCases(page);
+    this.fetchCasesBasedOnState();
     this.props.fetchLocations();
+  }
+
+  fetchCasesBasedOnState() {
+    const { filters, page } = this.state;
+    const { fetchCases, fetchFilteredCases } = this.props;
+    if (_.isEmpty(filters.value)) {
+      fetchCases(page);
+    } else {
+      fetchFilteredCases(filters.value, page);
+    }
   }
 
   structuredFields = item => {
@@ -60,7 +71,25 @@ export class Entries extends Component {
   handleLoadMore = () => {
     console.log('loading more...');
     this.setState({ page: this.state.page + 1 }, () => {
-      this.props.fetchCases(this.state.page);
+      this.fetchCasesBasedOnState();
+    });
+  };
+
+  handleFilterChange = (name, event) => {
+    const { filters } = this.state;
+    let newFilters;
+    if (name !== 'clear') {
+      newFilters = {
+        value: { ...filters.value, [name]: event.value },
+        raw: { ...filters.raw, [name]: event.value }
+      };
+    } else {
+      newFilters = { value: {}, raw: {} };
+    }
+
+    this.setState({ filters: newFilters }, () => {
+      console.log(this.state.filters);
+      this.fetchCasesBasedOnState();
     });
   };
 
@@ -68,7 +97,7 @@ export class Entries extends Component {
     const { error, loading: casesLoading, items } = this.props.cases;
     const { loading: locationsLoading, items: locations, lookup } = this.props.locations;
     const loading = casesLoading || locationsLoading;
-    const { page } = this.state;
+    const { page, filters } = this.state;
 
     if (items === undefined || items === null || items.length === 0) {
       return (
@@ -80,6 +109,11 @@ export class Entries extends Component {
     } else {
       return (
         <div>
+          <Filters
+            locations={locations}
+            handleFilterChange={this.handleFilterChange}
+            values={filters.raw}
+          />
           {items.slice(0, recordsPerPage * (page + 1)).map(item => {
             return (
               <EntryItem
@@ -115,6 +149,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchCases: page => dispatch(fetchCases(page)),
+    fetchFilteredCases: (filters, page) => dispatch(fetchFilteredCases(filters, page)),
     deleteCase: id => dispatch(deleteCase(id)),
     updateCase: (id, data) => dispatch(updateCase(id, data)),
     fetchLocations: () => dispatch(fetchLocations())

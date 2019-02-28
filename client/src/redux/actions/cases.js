@@ -2,6 +2,7 @@ import axios from 'axios';
 export const FETCH_CASES_BEGIN = 'FETCH_CASES_BEGIN';
 export const FETCH_CASES_SUCCESS = 'FETCH_CASES_SUCCESS';
 export const FETCH_CASES_FAILURE = 'FETCH_CASES_FAILURE';
+export const FETCH_FILTERED_CASES_SUCCESS = 'FETCH_FILTERED_CASES_SUCCESS';
 export const UPDATE_CASES_BEGIN = 'UPDATE_CASES_BEGIN';
 export const UPDATE_CASES_SUCCESS = 'UPDATE_CASES_SUCCESS';
 export const UPDATE_CASES_FAILURE = 'UPDATE_CASES_FAILURE';
@@ -25,6 +26,11 @@ export const fetchCasesSuccess = cases => ({
 export const fetchCasesFailure = error => ({
   type: FETCH_CASES_FAILURE,
   payload: { error }
+});
+
+export const fetchFilteredCasesSuccess = cases => ({
+  type: FETCH_FILTERED_CASES_SUCCESS,
+  payload: { cases }
 });
 
 export const updateCasesBegin = () => ({
@@ -64,6 +70,23 @@ export const fetchCases = page => {
       .then(response => {
         console.log(response);
         dispatch(fetchCasesSuccess(response.data));
+      })
+      .catch(function(error) {
+        console.log(error);
+        dispatch(fetchCasesFailure(error));
+      });
+  };
+};
+
+export const fetchFilteredCases = (filters, page) => {
+  return dispatch => {
+    dispatch(fetchCasesBegin());
+
+    axios
+      .get('/cases', { params: { ...filters, page } })
+      .then(response => {
+        console.log(response);
+        dispatch(fetchFilteredCasesSuccess(response.data));
       })
       .catch(function(error) {
         console.log(error);

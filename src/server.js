@@ -32,7 +32,7 @@ app.get('/locations', (req, res) => {
 
 app.get('/cases', (req, res) => {
   const filter = {};
-  const validFilters = ['species', 'age', 'locationId'];
+  const validFilters = ['species', 'age', 'locationId', 'pathogen'];
   validFilters.forEach(f => {
     if (req.param(f) && req.param(f) !== '') filter[f] = req.param(f);
   });
