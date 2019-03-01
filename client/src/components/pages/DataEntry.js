@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import { SALMON_COLOR } from '../../config/constants';
 import Entries from '../Entries';
 import Preview from '../Preview';
 
@@ -32,6 +35,9 @@ export class DataEntry extends Component {
         >
           <Preview />
         </div>
+        <Fab style={{ backgroundColor: SALMON_COLOR, color: 'white' }} aria-label="Add">
+          <AddIcon />
+        </Fab>
         <div style={{ backgroundColor: 'lightGrey', height: '15%' }}>
           <ul>
             <li>
