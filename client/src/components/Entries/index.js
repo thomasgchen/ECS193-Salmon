@@ -1,26 +1,48 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { fetchCases, fetchFilteredCases, updateCase, deleteCase } from '../../redux/actions/cases';
+import { fetchCases, updateCase, deleteCase } from '../../redux/actions/cases';
 import { fetchLocations } from '../../redux/actions/locations';
 import EntryItem from './EntryItem';
 import Filters from './Filters';
 import _ from 'lodash';
+import Grid from '@material-ui/core/Grid';
 import { CenteredProgress } from '../Progress';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { withStyles } from '@material-ui/core/styles';
+import { RECORDS_PER_PAGE } from '../../config/constants';
 
-const recordsPerPage = 50; // Make sure this matches the endpoint
 const selectFields = ['age', 'pathogen', 'species', 'LocationId'];
 const dateFields = ['date'];
 const ignoredFields = ['Location.name'];
 const aliasedFields = { LocationId: 'location' };
 
+const styles = {
+  root: {
+    maxHeight: '100%',
+    width: '100%',
+    flexGrow: 1,
+    overflowX: 'hidden',
+    flexWrap: 'nowrap'
+  },
+  filtersSection: {
+    maxWidth: '100%',
+    width: '100%'
+  },
+  scrollableSection: {
+    maxWidth: '100%',
+    width: '100%',
+    overflowX: 'hidden',
+    overflowY: 'scroll'
+  }
+};
+
 export class Entries extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: 0,
-      filters: {}
+      filters: {},
+      page: 0
     };
   }
 
@@ -30,13 +52,7 @@ export class Entries extends Component {
   }
 
   fetchCasesBasedOnState() {
-    const { filters, page } = this.state;
-    const { fetchCases, fetchFilteredCases } = this.props;
-    if (_.isEmpty(filters)) {
-      fetchCases(page);
-    } else {
-      fetchFilteredCases(filters, page);
-    }
+    this.props.fetchCases(this.state.page, this.state.filters);
   }
 
   structuredFields = item => {
@@ -87,34 +103,38 @@ export class Entries extends Component {
       newFilters = {};
     }
 
-    this.setState({ filters: newFilters }, () => {
-      console.log(this.state.filters);
-      this.fetchCasesBasedOnState();
-    });
+    if (!_.isEqual(newFilters, filters)) {
+      this.setState({ filters: newFilters, page: 0 }, () => {
+        console.log('Filters', this.state.filters);
+        this.fetchCasesBasedOnState();
+      });
+    }
   };
 
   render() {
-    const { error, loading: casesLoading, items } = this.props.cases;
+    const { error, loading: casesLoading, items, noMoreToLoad } = this.props.cases;
     const { loading: locationsLoading, items: locations, lookup } = this.props.locations;
     const loading = casesLoading || locationsLoading;
-    const { page, filters } = this.state;
+    const { filters, page } = this.state;
 
-    if (items === undefined || items === null || items.length === 0) {
-      return (
-        <div>
-          {loading ? <CenteredProgress /> : <p>No items in db.</p>}
-          {error && <p>{String(error)}</p>}
-        </div>
-      );
-    } else {
-      return (
-        <div>
+    return (
+      <Grid
+        container
+        spacing={32}
+        direction="column"
+        alignItems="center"
+        justify="flex-start"
+        className={this.props.classes.root}
+      >
+        <Grid xs={2} item className={this.props.classes.filtersSection}>
           <Filters
             locations={locations}
             handleFilterChange={this.handleFilterChange}
             values={filters}
           />
-          {items.slice(0, recordsPerPage * (page + 1)).map(item => {
+        </Grid>
+        <Grid xs={10} item className={this.props.classes.scrollableSection}>
+          {items.slice(0, RECORDS_PER_PAGE * (page + 1)).map(item => {
             return (
               <EntryItem
                 id={item.id}
@@ -132,13 +152,19 @@ export class Entries extends Component {
                 <CircularProgress color="secondary" />
               </div>
             )}
-            <Button variant="contained" disabled={loading}>
-              Load More
-            </Button>
+            {noMoreToLoad ? (
+              <p style={{ color: '#bdbdbd' }}>
+                <i>all records loaded</i>
+              </p>
+            ) : (
+              <Button variant="contained" disabled={loading}>
+                Load More
+              </Button>
+            )}
           </div>
-        </div>
-      );
-    }
+        </Grid>
+      </Grid>
+    );
   }
 }
 
@@ -148,8 +174,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchCases: page => dispatch(fetchCases(page)),
-    fetchFilteredCases: (filters, page) => dispatch(fetchFilteredCases(filters, page)),
+    fetchCases: (page, filters) => dispatch(fetchCases(page, filters)),
     deleteCase: id => dispatch(deleteCase(id)),
     updateCase: (id, data) => dispatch(updateCase(id, data)),
     fetchLocations: () => dispatch(fetchLocations())
@@ -159,7 +184,7 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Entries);
+)(withStyles(styles)(Entries));
 
 export { default as Field } from './Field';
 export { default as EntryItem } from './EntryItem';

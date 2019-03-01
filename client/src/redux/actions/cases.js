@@ -1,4 +1,5 @@
 import axios from 'axios';
+import hash from 'object-hash';
 export const FETCH_CASES_BEGIN = 'FETCH_CASES_BEGIN';
 export const FETCH_CASES_SUCCESS = 'FETCH_CASES_SUCCESS';
 export const FETCH_CASES_FAILURE = 'FETCH_CASES_FAILURE';
@@ -18,19 +19,14 @@ export const fetchCasesBegin = () => ({
   type: FETCH_CASES_BEGIN
 });
 
-export const fetchCasesSuccess = cases => ({
+export const fetchCasesSuccess = (cases, filtersHash) => ({
   type: FETCH_CASES_SUCCESS,
-  payload: { cases }
+  payload: { cases, filtersHash }
 });
 
 export const fetchCasesFailure = error => ({
   type: FETCH_CASES_FAILURE,
   payload: { error }
-});
-
-export const fetchFilteredCasesSuccess = cases => ({
-  type: FETCH_FILTERED_CASES_SUCCESS,
-  payload: { cases }
 });
 
 export const updateCasesBegin = () => ({
@@ -61,31 +57,16 @@ export const deleteCasesFailure = error => ({
   payload: { error }
 });
 
-export const fetchCases = page => {
+export const fetchCases = (page, filters) => {
   return dispatch => {
     dispatch(fetchCasesBegin());
-
     axios
-      .get('/cases', { params: { page } })
+      .get('/cases', { params: { page, ...filters } })
       .then(response => {
-        dispatch(fetchCasesSuccess(response.data));
+        dispatch(fetchCasesSuccess(response.data, hash(filters)));
       })
       .catch(function(error) {
-        dispatch(fetchCasesFailure(error));
-      });
-  };
-};
-
-export const fetchFilteredCases = (filters, page) => {
-  return dispatch => {
-    dispatch(fetchCasesBegin());
-
-    axios
-      .get('/cases', { params: { ...filters, page } })
-      .then(response => {
-        dispatch(fetchFilteredCasesSuccess(response.data));
-      })
-      .catch(function(error) {
+        console.log(error);
         dispatch(fetchCasesFailure(error));
       });
   };

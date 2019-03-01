@@ -28,11 +28,9 @@ export const fetchLocations = () => {
     axios
       .get('/locations')
       .then(response => {
-        console.log(response);
         dispatch(fetchLocationsSuccess(response.data));
       })
       .catch(function(error) {
-        console.log(error);
         dispatch(fetchLocationsFailure(error));
       });
   };

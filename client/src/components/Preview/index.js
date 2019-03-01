@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CenteredProgress } from '../Progress';
+import { LIGHT_SALMON_COLOR } from '../../config/constants';
 import {
   BarChart,
   Bar,
@@ -27,7 +28,7 @@ export class Preview extends Component {
     if (items === undefined || items === null || items.length === 0) {
       return (
         <div>
-          {loading ? <CenteredProgress /> : <p>No items in db.</p>}
+          {loading ? <CenteredProgress /> : <div />}
           {error && <p>{String(error)}</p>}
         </div>
       );
@@ -50,7 +51,7 @@ export class Preview extends Component {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="prevalence" fill="#F4BBB8" />
+              <Bar dataKey="prevalence" fill={LIGHT_SALMON_COLOR} />
             </BarChart>
           </ResponsiveContainer>
         </div>

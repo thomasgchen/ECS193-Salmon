@@ -12,7 +12,6 @@ export class DataEntry extends Component {
           style={{
             height: '85%',
             width: '65%',
-            overflow: 'scroll',
             paddingTop: '10px',
             paddingRight: '10xpx',
             display: 'inline-block',

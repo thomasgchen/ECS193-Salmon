@@ -4,10 +4,13 @@ import Grid from '@material-ui/core/Grid';
 import SelectField from './SelectField';
 import { withStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import { SALMON_COLOR } from '../../config/constants';
 
 const styles = theme => ({
   root: {},
   button: {
+    height: '100%',
+    color: SALMON_COLOR,
     margin: theme.spacing.unit
   }
 });
