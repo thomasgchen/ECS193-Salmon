@@ -1,23 +1,14 @@
 import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import NavBar from '../Navbar/Navbar';
 
 export class Explorer extends Component {
   render() {
     return (
       <div>
+        <NavBar />
         <p>Explorer</p>
-        <ul>
-          <li>
-            <Link to="/">Dashboard</Link>
-          </li>
-          <li>
-            <Link to="/entry">Data Entry</Link>
-          </li>
-          <li>
-            <Link to="/explorer">Data Explorer</Link>
-          </li>
-        </ul>
       </div>
     );
   }
