@@ -12,9 +12,5 @@ To open REPL: `npm run repl`
 ## Example .env
 
 ```
-DB_USERNAME=jacobbev
-DB_PASSWORD=null
-DB_NAME=ecs193_database_development
-DB_HOSTNAME=127.0.0.1
-PGCONNECTSTRING=postgres://jacobbev@127.0.0.1:5432/ecs193_database_development
+DATABASE_URL=postgres://tchen@127.0.0.1:5432/ecs193_database_development
 ```
