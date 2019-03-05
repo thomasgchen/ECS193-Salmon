@@ -15,13 +15,20 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-const getCases = page => {
+const getLocations = () => {
+  return models.Location.findAll({
+    raw: true
+  });
+};
+
+const getCases = (page, query) => {
   const limit = 50;
   return models.Case.findAll({
+    where: query,
     order: [['id', 'ASC']],
     limit,
     offset: limit * (page || 0),
-    attributes: { exclude: ['createdAt', 'updatedAt', 'LocationId'] },
+    attributes: { exclude: ['createdAt', 'updatedAt'] },
     include: [{ model: models.Location, attributes: ['name'] }],
     raw: true
   });
@@ -76,7 +83,7 @@ const updateCase = (req, res) => {
         .then(updatedCase => {
           models.Case.findOne({
             where: { id: updatedCase.id },
-            attributes: { exclude: ['createdAt', 'updatedAt', 'LocationId'] },
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
             include: [{ model: models.Location, attributes: ['name'] }],
             raw: true
           }).then(caseObj => {
@@ -93,6 +100,7 @@ const updateCase = (req, res) => {
 };
 
 module.exports = {
+  getLocations,
   getCases,
   createCase,
   destroyCase,

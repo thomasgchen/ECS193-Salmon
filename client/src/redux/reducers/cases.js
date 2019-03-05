@@ -1,3 +1,4 @@
+import hash from 'object-hash';
 import {
   FETCH_CASES_BEGIN,
   FETCH_CASES_SUCCESS,
@@ -10,9 +11,13 @@ import {
   DELETE_CASES_FAILURE
 } from '../actions/cases';
 
+import { RECORDS_PER_PAGE } from '../../config/constants';
+
 const initialState = {
   items: [],
   loading: false,
+  filtersHash: hash({}),
+  noMoreToLoad: false,
   error: null
 };
 
@@ -27,13 +32,17 @@ export default function cases(state = initialState, action) {
 
     case FETCH_CASES_SUCCESS:
       const ids = action.payload.cases.map(c => c.id);
-      const prunedFetchedItems = state.items.filter((value, index, arr) => {
-        return !ids.includes(value.id);
-      });
-
+      let prunedFetchedItems = [];
+      if (state.filtersHash === action.payload.filtersHash) {
+        prunedFetchedItems = state.items.filter((value, index, arr) => {
+          return !ids.includes(value.id);
+        });
+      }
       return {
         ...state,
         loading: false,
+        filtersHash: action.payload.filtersHash,
+        noMoreToLoad: action.payload.cases.length < RECORDS_PER_PAGE ? true : false,
         items: [...prunedFetchedItems, ...action.payload.cases]
       };
 

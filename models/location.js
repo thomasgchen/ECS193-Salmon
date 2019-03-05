@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     longitude: DataTypes.DOUBLE
   });
   Location.associate = models => {
-    Location.hasMany(models.Case);
+    Location.hasMany(models.Case, { onDelete: 'cascade' });
   };
   return Location;
 };

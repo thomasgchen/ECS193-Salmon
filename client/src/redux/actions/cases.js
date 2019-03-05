@@ -1,7 +1,9 @@
 import axios from 'axios';
+import hash from 'object-hash';
 export const FETCH_CASES_BEGIN = 'FETCH_CASES_BEGIN';
 export const FETCH_CASES_SUCCESS = 'FETCH_CASES_SUCCESS';
 export const FETCH_CASES_FAILURE = 'FETCH_CASES_FAILURE';
+export const FETCH_FILTERED_CASES_SUCCESS = 'FETCH_FILTERED_CASES_SUCCESS';
 export const UPDATE_CASES_BEGIN = 'UPDATE_CASES_BEGIN';
 export const UPDATE_CASES_SUCCESS = 'UPDATE_CASES_SUCCESS';
 export const UPDATE_CASES_FAILURE = 'UPDATE_CASES_FAILURE';
@@ -9,13 +11,17 @@ export const DELETE_CASES_BEGIN = 'DELETE_CASES_BEGIN';
 export const DELETE_CASES_SUCCESS = 'DELETE_CASES_SUCCESS';
 export const DELETE_CASES_FAILURE = 'DELETE_CASES_FAILURE';
 
+if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
+  axios.defaults.baseURL = 'https://salmon-health.herokuapp.com/';
+}
+
 export const fetchCasesBegin = () => ({
   type: FETCH_CASES_BEGIN
 });
 
-export const fetchCasesSuccess = cases => ({
+export const fetchCasesSuccess = (cases, filtersHash) => ({
   type: FETCH_CASES_SUCCESS,
-  payload: { cases }
+  payload: { cases, filtersHash }
 });
 
 export const fetchCasesFailure = error => ({
@@ -51,15 +57,13 @@ export const deleteCasesFailure = error => ({
   payload: { error }
 });
 
-export const fetchCases = page => {
+export const fetchCases = (page, filters) => {
   return dispatch => {
     dispatch(fetchCasesBegin());
-
     axios
-      .get('/cases', { params: { page } })
+      .get('/cases', { params: { page, ...filters } })
       .then(response => {
-        console.log(response);
-        dispatch(fetchCasesSuccess(response.data));
+        dispatch(fetchCasesSuccess(response.data, hash(filters)));
       })
       .catch(function(error) {
         console.log(error);
@@ -75,11 +79,9 @@ export const updateCase = data => {
     axios
       .put('/cases', data)
       .then(response => {
-        console.log(response);
         dispatch(updateCasesSuccess(response.data));
       })
       .catch(function(error) {
-        console.log(error);
         dispatch(updateCasesFailure(error));
       });
   };

@@ -48,7 +48,6 @@ export class EntryItem extends Component {
     fields.map(field => {
       return (update_object[field.name] = changes[field.name] || field.value);
     });
-
     this.setState({ changes: {}, isEditing: false });
     handleUpdate(id, changes);
   };
@@ -101,10 +100,11 @@ export class EntryItem extends Component {
   };
 
   render() {
-    const { fields, isHeader, classes, id } = this.props;
+    const { fields, isHeader, classes, id, extraData } = this.props;
     const { isEditing, changes, isHovering } = this.state;
     return (
       <Grid
+        key={`entryitem-${id}`}
         container
         className={classes.root}
         onMouseEnter={this.handleMouseEnter}
@@ -118,11 +118,12 @@ export class EntryItem extends Component {
         <Grid item xs={10}>
           <Grid container spacing={8}>
             {fields.map(field => {
-              if (field.name === 'id') return;
+              if (field.name === 'id') return <div key={`id-${id}`} />;
               return (
-                <Grid item xs={2}>
+                <Grid item xs={2} key={`${field.name}-${id}`}>
                   <Field
                     key={field.name}
+                    label={field.label}
                     name={field.name}
                     value={field.value}
                     currentValue={
@@ -132,6 +133,8 @@ export class EntryItem extends Component {
                     isHeader={isHeader}
                     isEditing={isEditing}
                     handleChange={this.handleFieldChange}
+                    locations={field.name === 'LocationId' ? extraData.locations : null}
+                    lookupTable={field.name === 'LocationId' ? extraData.lookupTable : null}
                   />
                 </Grid>
               );
@@ -154,7 +157,6 @@ export class EntryItem extends Component {
               <IconButton aria-label="Edit" onClick={this.handleEditPress}>
                 <EditIcon />
               </IconButton>
-              {/* TODO: confirmation dialog */}
               <IconButton aria-label="Delete" onClick={this.handleDeletePress}>
                 <DeleteIcon />
               </IconButton>
@@ -173,13 +175,14 @@ EntryItem.propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       value: PropTypes.string,
+      label: PropTypes.string,
       formType: PropTypes.string
     })
   ).isRequired,
   isLoading: PropTypes.bool, // If true show loading icon
   handleUpdate: PropTypes.func.isRequired,
-  handleUpdate: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  extraData: PropTypes.object // Optional object of additional data (used to send locations in)
 };
 
 export default withStyles(styles)(EntryItem);
