@@ -14,17 +14,17 @@ const NavBar = () => {
           <Typography variant="title" color="inherit" style={{ flex: 1 }}>
             Salmon
           </Typography>
-          <Button raised color="accent">
+          <Button>
             <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
               Dashboard
             </Link>
           </Button>
-          <Button raised color="accent">
+          <Button>
             <Link to="/entry" style={{ textDecoration: 'none', color: 'white' }}>
               Data Entry
             </Link>
           </Button>
-          <Button raised color="accent">
+          <Button>
             <Link to="/explorer" style={{ textDecoration: 'none', color: 'white' }}>
               Data Explorer
             </Link>
