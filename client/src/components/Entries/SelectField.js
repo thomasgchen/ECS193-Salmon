@@ -144,7 +144,6 @@ function Menu(props) {
 }
 
 function SelectField({ theme, name, value, onChange, classes, options, label }) {
-  if (name === 'location') console.log(name, value);
   const selectStyles = {
     input: base => ({
       ...base,

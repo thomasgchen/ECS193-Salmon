@@ -8,7 +8,20 @@ import Entries from '../Entries';
 import Preview from '../Preview';
 
 export class DataEntry extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      newEntryOpen: false
+    };
+  }
+
+  handleNewEntryOpen = () => {
+    this.setState({ newEntryOpen: !this.state.newEntryOpen });
+  };
+
   render() {
+    const { newEntryOpen } = this.state;
+
     return (
       <div style={{ margin: 0, overflow: 'hidden', height: '100vh', width: '100vw' }}>
         <div
@@ -21,7 +34,7 @@ export class DataEntry extends Component {
             overflowX: 'hidden'
           }}
         >
-          <Entries />
+          <Entries newEntryOpen={newEntryOpen} handleNewEntryOpen={this.handleNewEntryOpen} />
         </div>
         <div
           style={{
@@ -35,7 +48,11 @@ export class DataEntry extends Component {
         >
           <Preview />
         </div>
-        <Fab style={{ backgroundColor: SALMON_COLOR, color: 'white' }} aria-label="Add">
+        <Fab
+          style={{ backgroundColor: SALMON_COLOR, color: 'white' }}
+          aria-label="Add"
+          onClick={this.handleNewEntryOpen}
+        >
           <AddIcon />
         </Fab>
         <div style={{ backgroundColor: 'lightGrey', height: '15%' }}>

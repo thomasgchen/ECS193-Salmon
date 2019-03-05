@@ -64,7 +64,9 @@ export class EntryItem extends Component {
 
   handleClearChanges = event => {
     event.preventDefault();
-    this.setState({ changes: {}, isEditing: false });
+    this.setState({ changes: {}, isEditing: false }, () => {
+      if (this.props.newItem) this.props.handleDelete();
+    });
   };
 
   handleEditPress = event => {
@@ -100,8 +102,10 @@ export class EntryItem extends Component {
   };
 
   render() {
-    const { fields, isHeader, classes, id, extraData } = this.props;
-    const { isEditing, changes, isHovering } = this.state;
+    const { fields, isHeader, classes, id, extraData, newItem, hidden } = this.props;
+    const { changes, isHovering } = this.state;
+    const isEditing = this.state.isEditing || newItem;
+    if (hidden) return <span key={`entryitem-${id}`} />;
     return (
       <Grid
         key={`entryitem-${id}`}
@@ -112,7 +116,7 @@ export class EntryItem extends Component {
       >
         <Grid item xs={1} className={classes.idCell}>
           <p>
-            <strong>{id}</strong>
+            <strong>{newItem ? 'new' : id}</strong>
           </p>
         </Grid>
         <Grid item xs={10}>
@@ -125,9 +129,13 @@ export class EntryItem extends Component {
                     key={field.name}
                     label={field.label}
                     name={field.name}
-                    value={field.value}
+                    value={newItem ? '' : field.value}
                     currentValue={
-                      changes[field.name] === undefined ? field.value : changes[field.name]
+                      changes[field.name] === undefined
+                        ? newItem
+                          ? ''
+                          : field.value
+                        : changes[field.name]
                     }
                     formType={field.formType}
                     isHeader={isHeader}
@@ -169,6 +177,8 @@ export class EntryItem extends Component {
 }
 
 EntryItem.propTypes = {
+  hidden: PropTypes.bool,
+  newItem: PropTypes.bool,
   id: PropTypes.number.isRequired,
   fields: PropTypes.arrayOf(
     // Should not have id in fields.

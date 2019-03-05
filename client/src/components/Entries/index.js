@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { fetchCases, updateCase, deleteCase } from '../../redux/actions/cases';
+import { fetchCases, updateCase, deleteCase, createCase } from '../../redux/actions/cases';
 import { fetchLocations } from '../../redux/actions/locations';
 import EntryItem from './EntryItem';
 import Filters from './Filters';
@@ -91,7 +92,6 @@ export class Entries extends Component {
     let row = [];
     _.mapKeys(item, (value, key) => {
       if (!ignoredFields.includes(key)) {
-        if (key === 'Location.Id') console.log(String(value));
         row.push({
           label: aliasedFields[key] || key,
           name: key,
@@ -116,16 +116,21 @@ export class Entries extends Component {
   };
 
   handleUpdate = (id, data) => {
-    this.props.updateCase({ ...data, id });
+    if (id === -1) {
+      // New case
+      console.log('Creating case', data);
+      this.props.createCase(data);
+      this.props.handleNewEntryOpen();
+    } else {
+      this.props.updateCase({ ...data, id });
+    }
   };
 
   handleDelete = id => {
-    console.log('deleting');
     this.props.deleteCase(id);
   };
 
   handleLoadMore = () => {
-    console.log('loading more...');
     this.setState({ page: this.state.page + 1 }, () => {
       this.fetchCasesBasedOnState();
     });
@@ -145,13 +150,13 @@ export class Entries extends Component {
 
     if (!_.isEqual(newFilters, filters)) {
       this.setState({ filters: newFilters, page: 0 }, () => {
-        console.log('Filters', this.state.filters);
         this.fetchCasesBasedOnState();
       });
     }
   };
 
   render() {
+    const { handleNewEntryOpen, newEntryOpen } = this.props;
     const { error: casesError, loading: casesLoading, items, noMoreToLoad } = this.props.cases;
     const {
       error: locationsError,
@@ -162,7 +167,6 @@ export class Entries extends Component {
     const loading = casesLoading || locationsLoading;
     const error = this.constructErrorMessage(casesError, locationsError);
     const { filters, page } = this.state;
-
     return (
       <div className={this.props.classes.outerRoot}>
         <Grid
@@ -181,7 +185,7 @@ export class Entries extends Component {
             />
           </Grid>
           <Grid xs={10} item className={this.props.classes.scrollableSection}>
-            {items.slice(0, RECORDS_PER_PAGE * (page + 1)).map(item => {
+            {items.map(item => {
               return (
                 <EntryItem
                   id={item.id}
@@ -189,10 +193,22 @@ export class Entries extends Component {
                   fields={this.structuredFields(item)}
                   handleUpdate={this.handleUpdate}
                   handleDelete={this.handleDelete}
+                  handleNewEntryOpen={this.props.handleNewEntryOpen}
                   extraData={{ locations: locations, lookupTable: lookup }}
                 />
               );
             })}
+
+            <EntryItem
+              hidden={!newEntryOpen}
+              newItem
+              id={-1}
+              fields={this.structuredFields(items[0])}
+              handleUpdate={this.handleUpdate}
+              handleDelete={handleNewEntryOpen}
+              extraData={{ locations: locations, lookupTable: lookup }}
+            />
+
             <div
               style={{ textAlign: 'center', marginBottom: '10px' }}
               onClick={this.handleLoadMore}
@@ -246,6 +262,12 @@ export class Entries extends Component {
   }
 }
 
+Entries.propTypes = {
+  newEntryOpen: PropTypes.bool,
+  handleNewEntryOpen: PropTypes.func.isRequired,
+  classes: PropTypes.any.isRequired
+};
+
 const mapStateToProps = state => {
   return { cases: state.cases, locations: state.locations };
 };
@@ -254,7 +276,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchCases: (page, filters) => dispatch(fetchCases(page, filters)),
     deleteCase: id => dispatch(deleteCase(id)),
-    updateCase: (id, data) => dispatch(updateCase(id, data)),
+    updateCase: data => dispatch(updateCase(data)),
+    createCase: data => dispatch(createCase(data)),
     fetchLocations: () => dispatch(fetchLocations())
   };
 };

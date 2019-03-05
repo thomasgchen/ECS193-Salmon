@@ -37,7 +37,18 @@ const getCases = (page, query) => {
 const createCase = (req, res) => {
   models.Case.create(req.body)
     .then(newCase => {
-      res.status(201).json(newCase);
+      models.Case.findOne({
+        where: { id: newCase.id },
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
+        include: [{ model: models.Location, attributes: ['name'] }],
+        raw: true
+      })
+        .then(foundCase => {
+          res.status(201).json(foundCase);
+        })
+        .catch(err => {
+          res.status(500).send(err);
+        });
     })
     .catch(err => {
       res.status(400).send(err);

@@ -8,7 +8,10 @@ import {
   UPDATE_CASES_FAILURE,
   DELETE_CASES_BEGIN,
   DELETE_CASES_SUCCESS,
-  DELETE_CASES_FAILURE
+  DELETE_CASES_FAILURE,
+  CREATE_CASES_BEGIN,
+  CREATE_CASES_SUCCESS,
+  CREATE_CASES_FAILURE
 } from '../actions/cases';
 
 import { RECORDS_PER_PAGE } from '../../config/constants';
@@ -46,13 +49,7 @@ export default function cases(state = initialState, action) {
         items: [...prunedFetchedItems, ...action.payload.cases]
       };
 
-    case FETCH_CASES_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.error
-      };
-
+    case CREATE_CASES_BEGIN:
     case UPDATE_CASES_BEGIN:
       return {
         ...state,
@@ -71,6 +68,16 @@ export default function cases(state = initialState, action) {
         items: updatedItems
       };
 
+    case CREATE_CASES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        items: [...state.items, action.payload.newCase]
+      };
+
+    case DELETE_CASES_FAILURE:
+    case FETCH_CASES_FAILURE:
+    case CREATE_CASES_FAILURE:
     case UPDATE_CASES_FAILURE:
       return {
         ...state,
@@ -93,14 +100,6 @@ export default function cases(state = initialState, action) {
           return value.id !== action.payload.id;
         })
       };
-
-    case DELETE_CASES_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.error
-      };
-
     default:
       return state;
   }

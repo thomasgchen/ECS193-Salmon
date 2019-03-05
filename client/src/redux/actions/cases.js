@@ -10,6 +10,9 @@ export const UPDATE_CASES_FAILURE = 'UPDATE_CASES_FAILURE';
 export const DELETE_CASES_BEGIN = 'DELETE_CASES_BEGIN';
 export const DELETE_CASES_SUCCESS = 'DELETE_CASES_SUCCESS';
 export const DELETE_CASES_FAILURE = 'DELETE_CASES_FAILURE';
+export const CREATE_CASES_BEGIN = 'CREATE_CASES_BEGIN';
+export const CREATE_CASES_SUCCESS = 'CREATE_CASES_SUCCESS';
+export const CREATE_CASES_FAILURE = 'CREATE_CASES_FAILURE';
 
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
   axios.defaults.baseURL = 'https://salmon-health.herokuapp.com/';
@@ -40,6 +43,20 @@ export const updateCasesSuccess = updatedCase => ({
 
 export const updateCasesFailure = error => ({
   type: UPDATE_CASES_FAILURE,
+  payload: { error }
+});
+
+export const createCasesBegin = () => ({
+  type: CREATE_CASES_BEGIN
+});
+
+export const createCasesSuccess = newCase => ({
+  type: CREATE_CASES_SUCCESS,
+  payload: { newCase }
+});
+
+export const createCasesFailure = error => ({
+  type: CREATE_CASES_FAILURE,
   payload: { error }
 });
 
@@ -83,6 +100,21 @@ export const updateCase = data => {
       })
       .catch(function(error) {
         dispatch(updateCasesFailure(error));
+      });
+  };
+};
+
+export const createCase = data => {
+  return dispatch => {
+    dispatch(createCasesBegin());
+
+    axios
+      .post('/cases', data)
+      .then(response => {
+        dispatch(createCasesSuccess(response.data));
+      })
+      .catch(function(error) {
+        dispatch(createCasesFailure(error));
       });
   };
 };
