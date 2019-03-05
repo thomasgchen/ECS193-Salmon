@@ -1,23 +1,13 @@
-import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Navbar from '../Navbar/Navbar';
 
 export class Dashboard extends Component {
   render() {
     return (
       <div>
+        <Navbar />
         <p>Dashboard</p>
-        <ul>
-          <li>
-            <Link to="/">Dashboard</Link>
-          </li>
-          <li>
-            <Link to="/entry">Data Entry</Link>
-          </li>
-          <li>
-            <Link to="/explorer">Data Explorer</Link>
-          </li>
-        </ul>
       </div>
     );
   }

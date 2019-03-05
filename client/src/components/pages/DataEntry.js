@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Fab from '@material-ui/core/Fab';
@@ -6,6 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { SALMON_COLOR } from '../../config/constants';
 import Entries from '../Entries';
 import Preview from '../Preview';
+import Navbar from '../Navbar/Navbar';
 
 export class DataEntry extends Component {
   constructor(props) {
@@ -24,6 +24,7 @@ export class DataEntry extends Component {
 
     return (
       <div style={{ margin: 0, overflow: 'hidden', height: '100vh', width: '100vw' }}>
+        <Navbar />
         <div
           style={{
             height: '85%',
@@ -55,19 +56,6 @@ export class DataEntry extends Component {
         >
           <AddIcon />
         </Fab>
-        <div style={{ backgroundColor: 'lightGrey', height: '15%' }}>
-          <ul>
-            <li>
-              <Link to="/">Dashboard</Link>
-            </li>
-            <li>
-              <Link to="/entry">Data Entry</Link>
-            </li>
-            <li>
-              <Link to="/explorer">Data Explorer</Link>
-            </li>
-          </ul>
-        </div>
       </div>
     );
   }
