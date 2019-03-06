@@ -3,9 +3,7 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from './reducers';
 // import loggerMiddleware from './middleware/logger';
 
-const middleware = compose(
-  applyMiddleware(thunkMiddleware),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+const middleware = applyMiddleware(thunkMiddleware);
 
-export default createStore(rootReducer, undefined, middleware);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+export default createStore(rootReducer, composeEnhancers(middleware));

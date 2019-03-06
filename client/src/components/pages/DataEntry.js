@@ -27,30 +27,36 @@ export class DataEntry extends Component {
         <Navbar />
         <div
           style={{
-            height: '85%',
+            height: '95%',
             width: '65%',
             paddingTop: '10px',
             paddingRight: '10xpx',
             display: 'inline-block',
-            overflowX: 'hidden'
+            overflowX: 'hidden',
+            margin: '0'
           }}
         >
           <Entries newEntryOpen={newEntryOpen} handleNewEntryOpen={this.handleNewEntryOpen} />
         </div>
         <div
           style={{
-            height: '85%',
-            width: '30%',
+            height: '95%',
+            width: '33%',
             overflow: 'hidden',
-            paddingTop: '10px',
-            paddingRight: '10xpx',
+            margin: '0',
             display: 'inline-block'
           }}
         >
           <Preview />
         </div>
         <Fab
-          style={{ backgroundColor: SALMON_COLOR, color: 'white' }}
+          style={{
+            backgroundColor: SALMON_COLOR,
+            color: 'white',
+            position: 'absolute',
+            bottom: '8px',
+            right: '8px'
+          }}
           aria-label="Add"
           onClick={this.handleNewEntryOpen}
         >

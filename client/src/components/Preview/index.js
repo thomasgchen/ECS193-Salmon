@@ -36,16 +36,13 @@ export class Preview extends Component {
       return (
         <div
           style={{
-            width: '75%',
-            height: '65%',
-            padding: '15% 10%'
+            width: '100%',
+            height: '60%',
+            padding: '30% 0px'
           }}
         >
           <ResponsiveContainer>
-            <BarChart
-              data={this.structuredData(items)}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-            >
+            <BarChart data={this.structuredData(items)}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
