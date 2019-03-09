@@ -4,7 +4,7 @@ const path = require('path');
 const _ = require('lodash');
 const csv = require('fast-csv');
 const moment = require('moment');
-const models = require('../models/index');
+const models = require('../../models/index');
 
 // TODO: Run in async job, and run db queries within transaction
 
