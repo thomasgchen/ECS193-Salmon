@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Case = sequelize.define('Case', {
     caseNum: DataTypes.STRING,
-    date: DataTypes.STRING,
+    date: DataTypes.DATEONLY,
     confidence: DataTypes.STRING,
     species: DataTypes.STRING,
     age: DataTypes.STRING,

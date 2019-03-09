@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 const csv = require('fast-csv');
+const moment = require('moment');
 const models = require('../models/index');
 
 // TODO: Run in async job, and run db queries within transaction
@@ -16,7 +17,7 @@ fs.createReadStream(inputFilePath)
   .on('data', data => {
     try {
       const structuredData = _.mapValues(data, val => {
-        return val || undefined;
+        return val === data.date ? moment(val).format('YYYY-MM-DD') : val || undefined;
       });
 
       models.Location.findOrCreate({

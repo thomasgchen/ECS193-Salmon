@@ -11,7 +11,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       date: {
-        type: Sequelize.STRING
+        type: Sequelize.DATEONLY
       },
       confidence: {
         type: Sequelize.STRING
