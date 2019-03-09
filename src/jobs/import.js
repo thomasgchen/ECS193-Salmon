@@ -8,7 +8,7 @@ const models = require('../../models/index');
 
 // TODO: Run in async job, and run db queries within transaction
 
-const inputFilePath = path.join(__dirname, '..', 'db', 'lab_database.csv');
+const inputFilePath = path.join(__dirname, '../..', 'db', 'lab_database.csv');
 // const inputFilePath = path.join(__dirname, '..', 'db', 'lab_db_test.csv');
 const errors = [];
 
