@@ -112,5 +112,7 @@ export const VALID_SPECIES = [
 ].map(x => ({ label: x, value: x }));
 
 export const RECORDS_PER_PAGE = 50; // Make sure this matches the endpoint
-export const LIGHT_SALMON_COLOR = '#F4BBB8';
+export const LIGHT_SALMON_COLOR = '#f4bbb8';
 export const SALMON_COLOR = '#fa8072';
+export const COMP_COLOR_BLUE = '#A3CBF1';
+export const COMP_COLOR_GREEN = '#79BFA1';
