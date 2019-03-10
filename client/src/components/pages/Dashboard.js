@@ -4,6 +4,7 @@ import Navbar from '../Navbar/Navbar';
 import { fetchGraphs } from '../../redux/actions/dashboardGraphs';
 import { Grid, withStyles } from '@material-ui/core';
 import { StackedBarGraph, ScatterOverTime } from '../Graph';
+import { CenteredProgress } from '../Progress';
 
 const styles = theme => ({
   root: { flexGrow: 1, padding: '1%' }
@@ -62,7 +63,15 @@ export class Dashboard extends Component {
   render() {
     const { classes } = this.props;
     const { graphs, error, loading } = this.props.dashboardGraphs;
-    if (graphs.length <= 0 || loading || error) return <p>loading...</p>;
+    if (graphs.length <= 0 || loading || error)
+      return (
+        <div>
+          <Navbar />
+          <div style={{ minHeight: '100vh' }}>
+            <CenteredProgress />
+          </div>
+        </div>
+      );
     return (
       <div>
         <Navbar />

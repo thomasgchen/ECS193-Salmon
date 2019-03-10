@@ -116,4 +116,4 @@ export const LIGHT_SALMON_COLOR = '#f4bbb8';
 export const SALMON_COLOR = '#fa8072';
 export const COMP_COLOR_BLUE = '#A3CBF1';
 export const COMP_COLOR_GREEN = '#79BFA1';
-export const BACKGROUND_COLOR = '#f8f8ff';
+export const BACKGROUND_COLOR = '#eeeeee';
