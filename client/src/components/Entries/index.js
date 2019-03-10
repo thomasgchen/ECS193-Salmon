@@ -13,7 +13,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles';
-import { RECORDS_PER_PAGE } from '../../config/constants';
 
 const selectFields = ['age', 'pathogen', 'species', 'LocationId'];
 const dateFields = ['date'];
@@ -47,9 +46,16 @@ const styles = theme => ({
   }
 });
 
+const scrollInDiv = (childRef, top) => {
+  const parent = childRef.current.parentNode;
+  if (top) parent.scrollTop = 0;
+  else parent.scrollTop = parent.scrollHeight;
+};
+
 export class Entries extends Component {
   constructor(props) {
     super(props);
+    this.topOfScrollRef = React.createRef();
     this.state = {
       filters: {},
       page: 0,
@@ -72,6 +78,10 @@ export class Entries extends Component {
 
     if (prevError !== error && newErrorMessage) {
       this.setState({ snackbarOpen: true });
+    }
+
+    if (!prevProps.newEntryOpen && this.props.newEntryOpen) {
+      scrollInDiv(this.topOfScrollRef, false);
     }
   }
 
@@ -118,7 +128,6 @@ export class Entries extends Component {
   handleUpdate = (id, data) => {
     if (id === -1) {
       // New case
-      console.log('Creating case', data);
       this.props.createCase(data);
       this.props.handleNewEntryOpen();
     } else {
@@ -151,6 +160,7 @@ export class Entries extends Component {
     if (!_.isEqual(newFilters, filters)) {
       this.setState({ filters: newFilters, page: 0 }, () => {
         this.fetchCasesBasedOnState();
+        scrollInDiv(this.topOfScrollRef, true);
       });
     }
   };
@@ -166,7 +176,7 @@ export class Entries extends Component {
     } = this.props.locations;
     const loading = casesLoading || locationsLoading;
     const error = this.constructErrorMessage(casesError, locationsError);
-    const { filters, page } = this.state;
+    const { filters } = this.state;
     return (
       <div className={this.props.classes.outerRoot}>
         <Grid
@@ -185,6 +195,7 @@ export class Entries extends Component {
             />
           </Grid>
           <Grid xs={10} item className={this.props.classes.scrollableSection}>
+            <span ref={this.topOfScrollRef} />
             {items.map(item => {
               return (
                 <EntryItem
@@ -198,7 +209,6 @@ export class Entries extends Component {
                 />
               );
             })}
-
             <EntryItem
               hidden={!newEntryOpen}
               newItem
@@ -208,7 +218,6 @@ export class Entries extends Component {
               handleDelete={handleNewEntryOpen}
               extraData={{ locations: locations, lookupTable: lookup }}
             />
-
             <div
               style={{ textAlign: 'center', marginBottom: '10px' }}
               onClick={this.handleLoadMore}
