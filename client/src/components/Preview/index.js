@@ -27,12 +27,7 @@ export class Preview extends Component {
   render() {
     const { error, loading, items } = this.props.cases;
     if (items === undefined || items === null || items.length === 0) {
-      return (
-        <Paper>
-          {loading ? <CenteredProgress /> : <div />}
-          {error && <p>{String(error)}</p>}
-        </Paper>
-      );
+      return <Paper>{loading ? <CenteredProgress /> : <div />}</Paper>;
     } else {
       return (
         <Paper style={{ width: '100%', height: '100%' }}>

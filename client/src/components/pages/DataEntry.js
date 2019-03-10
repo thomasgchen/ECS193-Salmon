@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import CloseIcon from '@material-ui/icons/Close';
 import { SALMON_COLOR } from '../../config/constants';
 import Entries from '../Entries';
 import Preview from '../Preview';
@@ -68,12 +69,13 @@ export class DataEntry extends Component {
             color: 'white',
             position: 'absolute',
             bottom: '8px',
-            right: '8px'
+            right: '8px',
+            transition: ''
           }}
           aria-label="Add"
           onClick={this.handleNewEntryOpen}
         >
-          <AddIcon />
+          {!newEntryOpen ? <AddIcon /> : <AddIcon style={{ transform: 'rotate(45deg)' }} />}
         </Fab>
       </div>
     );
