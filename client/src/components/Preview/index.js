@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Paper from '@material-ui/core/Paper';
 import { CenteredProgress } from '../Progress';
 import { LIGHT_SALMON_COLOR } from '../../config/constants';
 import {
@@ -27,22 +28,24 @@ export class Preview extends Component {
     const { error, loading, items } = this.props.cases;
     if (items === undefined || items === null || items.length === 0) {
       return (
-        <div>
+        <Paper>
           {loading ? <CenteredProgress /> : <div />}
           {error && <p>{String(error)}</p>}
-        </div>
+        </Paper>
       );
     } else {
       return (
-        <div
-          style={{
-            width: '100%',
-            height: '60%',
-            padding: '30% 0px'
-          }}
-        >
+        <Paper style={{ width: '100%', height: '100%' }}>
           <ResponsiveContainer>
-            <BarChart data={this.structuredData(items)}>
+            <BarChart
+              data={this.structuredData(items)}
+              margin={{
+                top: 20,
+                right: 30,
+                bottom: 20,
+                left: 10
+              }}
+            >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
@@ -51,7 +54,7 @@ export class Preview extends Component {
               <Bar dataKey="prevalence" fill={LIGHT_SALMON_COLOR} />
             </BarChart>
           </ResponsiveContainer>
-        </div>
+        </Paper>
       );
     }
   }

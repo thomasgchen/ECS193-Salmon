@@ -6,6 +6,7 @@ import { SALMON_COLOR } from '../../config/constants';
 import Entries from '../Entries';
 import Preview from '../Preview';
 import Navbar from '../Navbar/Navbar';
+import { Grid } from '@material-ui/core';
 
 export class DataEntry extends Component {
   constructor(props) {
@@ -47,7 +48,19 @@ export class DataEntry extends Component {
             display: 'inline-block'
           }}
         >
-          <Preview />
+          <div style={{ flexGrow: 1, height: '100%', width: '100%' }}>
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignContent="center"
+              style={{ height: '100%', width: '100%' }}
+            >
+              <Grid item xs={12} style={{ width: '100%', height: '60%' }}>
+                <Preview />
+              </Grid>
+            </Grid>
+          </div>
         </div>
         <Fab
           style={{
