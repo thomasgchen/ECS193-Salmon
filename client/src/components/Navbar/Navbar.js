@@ -24,6 +24,11 @@ const NavBar = () => {
               Data Entry
             </Link>
           </Button>
+          <Button>
+            <Link to="/explorer" style={{ textDecoration: 'none', color: 'white' }}>
+              Data Explorer
+            </Link>
+          </Button>
         </Toolbar>
       </AppBar>
     </div>

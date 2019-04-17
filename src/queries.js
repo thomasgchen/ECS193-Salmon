@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 const Sequelize = require('sequelize');
+const _ = require('lodash');
 // eslint-disable-next-line no-unused-vars
-const models = require('../models/index');
 const hash = require('object-hash');
+const models = require('../models/index');
 
 const connectionString = process.env.DATABASE_URL;
 const sequelize = new Sequelize(connectionString);
@@ -37,8 +38,10 @@ const getCases = (page, query) => {
 };
 
 const getDataExplorerCasesRaw = query => {
+  console.log(query);
+  const structuredQuery = _.mapValues(query, attr => _.split(attr, '~'));
   return models.Case.findAll({
-    where: query,
+    where: structuredQuery,
     attributes: {
       exclude: ['createdAt', 'updatedAt', 'comments', 'confidence', 'fish', 'id']
     },
@@ -47,11 +50,11 @@ const getDataExplorerCasesRaw = query => {
   });
 };
 const getDataExplorerCases = (query, groupBy) => {
-  // Generate Explorer Hash (query values into hash - last updated case date.json)
   return models.Case.findAll({
     limit: 1,
     order: [['createdAt', 'DESC']]
   }).then(newestEntry => {
+    // Generate Explorer Hash (query values into hash - last updated case date.json)
     const queryHash = hash(query);
     const versionHash = hash(newestEntry[0].dataValues.updatedAt);
     const dataHash = `${queryHash}-${versionHash}`;
@@ -65,7 +68,10 @@ const getDataExplorerCases = (query, groupBy) => {
       // Create All Graphs
       const graphData = {
         hashIdentifier: dataHash,
-        prevelenceOverTime: graphs.createGraphByTime(rawData, groupBy)
+        dataLength: rawData.length,
+        graphs: {
+          prevalenceOverTime: graphs.createGraphByTime(rawData, groupBy)
+        }
       };
 
       // Save to AWS

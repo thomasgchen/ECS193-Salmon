@@ -1,32 +1,32 @@
 import {
-  FETCH_GRAPHS_BEGIN,
-  FETCH_GRAPHS_SUCCESS,
-  FETCH_GRAPHS_FAILURE
-} from '../actions/dashboardGraphs';
+  FETCH_EXPLORER_GRAPHS_BEGIN,
+  FETCH_EXPLORER_GRAPHS_SUCCESS,
+  FETCH_EXPLORER_GRAPHS_FAILURE
+} from '../actions/explorerGraphs';
 
 const initialState = {
-  graphs: [],
+  data: {},
   loading: false,
   error: null
 };
 
-export default function dashboardGraphs(state = initialState, action) {
+export default function explorerGraphs(state = initialState, action) {
   switch (action.type) {
-    case FETCH_GRAPHS_BEGIN:
+    case FETCH_EXPLORER_GRAPHS_BEGIN:
       return {
         ...state,
         loading: true,
         error: null
       };
 
-    case FETCH_GRAPHS_SUCCESS:
+    case FETCH_EXPLORER_GRAPHS_SUCCESS:
       return {
         ...state,
         loading: false,
-        graphs: action.payload.graphs
+        data: action.payload.data
       };
 
-    case FETCH_GRAPHS_FAILURE:
+    case FETCH_EXPLORER_GRAPHS_FAILURE:
       return {
         ...state,
         loading: false,

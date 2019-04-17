@@ -1,5 +1,6 @@
 // Shared/Common Graphs
 const _ = require('lodash');
+const moment = require('moment');
 
 const calculatePrevelence = arr => {
   let numFish = 0;
@@ -13,13 +14,15 @@ const calculatePrevelence = arr => {
 };
 
 const createGraphByTime = (data, groupBy) => {
-  const groupedByYear = _.groupBy(data, item => {
+  const filteredData = _.reject(data, c => moment(c.date).isBefore('2000-01-01'));
+  const groupedByYear = _.groupBy(filteredData, item => {
     return item.date.substring(0, 4);
   });
-
+  const labels = [];
   const groupedData = _.mapValues(groupedByYear, cases => {
     if (groupBy) {
       const grouped = _.groupBy(cases, item => {
+        labels.push(item[groupBy]);
         return item[groupBy];
       });
 
@@ -27,7 +30,7 @@ const createGraphByTime = (data, groupBy) => {
         return calculatePrevelence(groupedCases);
       });
     }
-
+    labels.push('all');
     return { all: calculatePrevelence(cases) };
   });
 
@@ -40,7 +43,7 @@ const createGraphByTime = (data, groupBy) => {
     structuredData.push(obj);
   });
 
-  return structuredData;
+  return { structuredData, labels: _.uniq(labels) };
 };
 
 module.exports = { createGraphByTime };
