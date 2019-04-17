@@ -76,7 +76,6 @@ export class Dashboard extends Component {
     return (
       <div>
         <Navbar />
-        <Map />
         <div className={classes.root}>
           <Grid container spacing={16} alignItems="center">
             <Grid item xs={12}>
@@ -101,6 +100,7 @@ export class Dashboard extends Component {
             })}
           </Grid>
         </div>
+        <Map />
       </div>
     );
   }
