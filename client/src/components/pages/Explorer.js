@@ -15,23 +15,48 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { CenteredProgress } from '../Progress';
-import { GRAPH_COLORS } from '../../config/constants';
+import { GRAPH_COLORS, VALID_AGES, VALID_SPECIES, VALID_PATHOGENS } from '../../config/constants';
+import Filter, { GroupByFilter } from '../Filters';
 
 const styles = theme => ({
   root: { flexGrow: 1, padding: '1%' },
   graphTitle: { width: '100%', textAlign: 'center', padding: '10px' },
   graphContainer: { height: '100%', width: '100%' },
+  filterContainer: { paddingBottom: '10px' },
   graphInnerContainer: { height: '300px', width: '100%' }
 });
 
 export class Explorer extends Component {
-  componentDidMount() {
-    this.props.fetchGraphs({ groupBy: 'age' });
+  constructor(props) {
+    super(props);
+    this.state = {
+      filters: { age: [], species: [], pathogen: [], groupBy: '' }
+    };
   }
+
+  fetchGraphs = () => {
+    this.props.fetchGraphs({ ...this.state.filters });
+  };
+
+  componentDidMount() {
+    this.props.fetchGraphs({ ...this.state.filters });
+  }
+
+  handleFilterChange = (name, value) => {
+    this.setState(
+      {
+        filters: { ...this.state.filters, [name]: value }
+      },
+      () => {
+        this.fetchGraphs();
+      }
+    );
+  };
 
   render() {
     const { classes } = this.props;
     const { data, error, loading } = this.props.explorerGraphs;
+    const { filters } = this.state;
     if (data && data.graphs) console.log(data.graphs.prevalenceOverTime);
     if (_.keys(data).length === 0 || loading || error)
       return (
@@ -49,7 +74,48 @@ export class Explorer extends Component {
         <div className={classes.root}>
           <Grid container spacing={16} alignItems="center">
             <Grid item xs={12}>
-              <Paper>Filters go here</Paper>
+              <Paper>
+                <Grid container justify="space-between" className={classes.filterContainer}>
+                  <Grid item>
+                    <Filter
+                      name="age"
+                      items={VALID_AGES}
+                      chosen={filters.age}
+                      handleFilterChange={event => {
+                        this.handleFilterChange('age', event.target.value);
+                      }}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Filter
+                      name="species"
+                      items={VALID_SPECIES}
+                      chosen={filters.species}
+                      handleFilterChange={event => {
+                        this.handleFilterChange('species', event.target.value);
+                      }}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Filter
+                      name="pathogen"
+                      items={VALID_PATHOGENS}
+                      chosen={filters.pathogen}
+                      handleFilterChange={event => {
+                        this.handleFilterChange('pathogen', event.target.value);
+                      }}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <GroupByFilter
+                      handleChange={event => {
+                        this.handleFilterChange('groupBy', event.target.value);
+                      }}
+                      value={this.state.filters.groupBy}
+                    />
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.graphContainer}>

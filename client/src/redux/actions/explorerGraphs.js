@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 export const FETCH_EXPLORER_GRAPHS_BEGIN = 'FETCH_EXPLORER_GRAPHS_BEGIN';
 export const FETCH_EXPLORER_GRAPHS_SUCCESS = 'FETCH_EXPLORER_GRAPHS_SUCCESS';
 export const FETCH_EXPLORER_GRAPHS_FAILURE = 'FETCH_EXPLORER_GRAPHS_FAILURE';
@@ -22,12 +23,21 @@ export const fetchExplorerGraphsFailure = error => ({
 });
 
 export const fetchGraphs = filters => {
-  console.log(filters);
+  console.log('filters', filters);
+  const structuredFilters = _.mapValues(filters, filter => {
+    console.log(filter);
+    if (_.isArray(filter)) {
+      return _.join(filter, '~');
+    } else {
+      return filter;
+    }
+  });
+  console.log('structuredFilters', structuredFilters);
   return dispatch => {
     dispatch(fetchExplorerGraphsBegin());
 
     axios
-      .get('/cases', { params: { explorer: true, ...filters } })
+      .get('/cases', { params: { explorer: true, ...structuredFilters } })
       .then(response => {
         console.log(response);
         dispatch(fetchExplorerGraphsSuccess(response.data));

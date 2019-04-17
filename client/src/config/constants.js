@@ -13,7 +13,6 @@ export const VALID_AGES = [
   'wild',
   'egg',
   'smolt',
-  'adult',
   'post smolt',
   'various',
   'tadpole',
