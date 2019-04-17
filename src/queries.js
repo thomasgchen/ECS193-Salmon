@@ -2,9 +2,11 @@
 const Sequelize = require('sequelize');
 // eslint-disable-next-line no-unused-vars
 const models = require('../models/index');
+const hash = require('object-hash');
 
 const connectionString = process.env.DATABASE_URL;
 const sequelize = new Sequelize(connectionString);
+const graphs = require('./graphs');
 
 sequelize
   .authenticate()
@@ -31,6 +33,44 @@ const getCases = (page, query) => {
     attributes: { exclude: ['createdAt', 'updatedAt'] },
     include: [{ model: models.Location, attributes: ['name'] }],
     raw: true
+  });
+};
+
+const getDataExplorerCasesRaw = query => {
+  return models.Case.findAll({
+    where: query,
+    attributes: {
+      exclude: ['createdAt', 'updatedAt', 'comments', 'confidence', 'fish', 'id']
+    },
+    include: [{ model: models.Location, attributes: ['name'] }],
+    raw: true
+  });
+};
+const getDataExplorerCases = (query, groupBy) => {
+  // Generate Explorer Hash (query values into hash - last updated case date.json)
+  return models.Case.findAll({
+    limit: 1,
+    order: [['createdAt', 'DESC']]
+  }).then(newestEntry => {
+    const queryHash = hash(query);
+    const versionHash = hash(newestEntry[0].dataValues.updatedAt);
+    const dataHash = `${queryHash}-${versionHash}`;
+    console.log('GETing data for: ', dataHash);
+    // TODO: Check AWS (lookup queryHash.json)
+    // TODO: If found is it valid? (check if hashIdentifier == dataHash)
+    // --> Return valid AWS
+    // Else Create new
+    return getDataExplorerCasesRaw(query).then(rawData => {
+      console.log('Length', rawData.length);
+      // Create All Graphs
+      const graphData = {
+        hashIdentifier: dataHash,
+        prevelenceOverTime: graphs.createGraphByTime(rawData, groupBy)
+      };
+
+      // Save to AWS
+      return graphData;
+    });
   });
 };
 
@@ -115,5 +155,6 @@ module.exports = {
   getCases,
   createCase,
   destroyCase,
-  updateCase
+  updateCase,
+  getDataExplorerCases
 };

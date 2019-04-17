@@ -37,13 +37,26 @@ app.get('/cases', (req, res) => {
     if (req.param(f) && req.param(f) !== '') filter[f] = req.param(f);
   });
 
-  db.getCases(req.param('page'), filter)
-    .then(cases => {
-      res.status(200).json(cases);
-    })
-    .catch(err => {
-      res.status(500).send(err);
-    });
+  if (req.param('explorer') && req.param('explorer') === 'true') {
+    const validGroupBys = ['age', 'pathogen', 'species', 'Location.name'];
+    let groupBy = '';
+    if (validGroupBys.includes(req.param('groupBy'))) groupBy = req.param('groupBy');
+    db.getDataExplorerCases(filter, groupBy)
+      .then(cases => {
+        res.status(200).json(cases);
+      })
+      .catch(err => {
+        res.status(500).send(err);
+      });
+  } else {
+    db.getCases(req.param('page'), filter)
+      .then(cases => {
+        res.status(200).json(cases);
+      })
+      .catch(err => {
+        res.status(500).send(err);
+      });
+  }
 });
 app.post('/cases', db.createCase);
 app.delete('/cases', db.destroyCase);
