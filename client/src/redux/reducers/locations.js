@@ -6,6 +6,7 @@ import {
 
 const initialState = {
   items: [],
+  locations: [],
   loading: false,
   error: null
 };
@@ -29,6 +30,7 @@ export default function locations(state = initialState, action) {
         ...state,
         loading: false,
         items: items,
+        locations: action.payload.locations,
         lookup: lookupTable
       };
 
