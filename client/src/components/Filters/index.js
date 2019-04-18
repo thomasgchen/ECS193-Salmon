@@ -42,7 +42,6 @@ const getStyles = (name, that) => {
 class Filter extends Component {
   render() {
     const { classes, items, chosen, handleFilterChange, name } = this.props;
-    console.log('chosen', chosen);
     return (
       <FormControl className={classes.formControl}>
         <InputLabel>{name}</InputLabel>

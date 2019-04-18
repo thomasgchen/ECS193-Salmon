@@ -31,6 +31,7 @@ const GroupByFilter = ({ classes, handleChange, value }) => {
         <MenuItem value={'age'}>Age</MenuItem>
         <MenuItem value={'species'}>Species</MenuItem>
         <MenuItem value={'pathogen'}>Pathogen</MenuItem>
+        <MenuItem value={'Location.name'}>Location</MenuItem>
       </Select>
     </FormControl>
   );

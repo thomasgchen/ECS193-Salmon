@@ -31,6 +31,8 @@ app.get('/locations', (req, res) => {
 });
 
 app.get('/cases', (req, res) => {
+  // res.status(500).send('error fool');
+  // return;
   const filter = {};
   const validFilters = ['species', 'age', 'LocationId', 'pathogen'];
   validFilters.forEach(f => {

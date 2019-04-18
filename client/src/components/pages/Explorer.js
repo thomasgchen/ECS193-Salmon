@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Navbar from '../Navbar/Navbar';
 import { fetchGraphs } from '../../redux/actions/explorerGraphs';
+import { fetchLocations } from '../../redux/actions/locations';
 import _ from 'lodash';
-import { Grid, withStyles, Paper } from '@material-ui/core';
+import { Grid, withStyles, Paper, CircularProgress } from '@material-ui/core';
 import {
   LineChart,
   Line,
@@ -23,14 +24,16 @@ const styles = theme => ({
   graphTitle: { width: '100%', textAlign: 'center', padding: '10px' },
   graphContainer: { height: '100%', width: '100%' },
   filterContainer: { paddingBottom: '10px' },
-  graphInnerContainer: { height: '300px', width: '100%' }
+  graphInnerContainer: { height: '300px', width: '100%' },
+  centered: { width: '100%', textAlign: 'center' },
+  centeredWithPadding: { width: '100%', textAlign: 'center', padding: '20px' }
 });
 
 export class Explorer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filters: { age: [], species: [], pathogen: [], groupBy: '' }
+      filters: { age: [], species: [], pathogen: [], LocationId: [], groupBy: '' }
     };
   }
 
@@ -40,6 +43,7 @@ export class Explorer extends Component {
 
   componentDidMount() {
     this.props.fetchGraphs({ ...this.state.filters });
+    this.props.fetchLocations();
   }
 
   handleFilterChange = (name, value) => {
@@ -53,17 +57,64 @@ export class Explorer extends Component {
     );
   };
 
-  render() {
+  renderPrevalenceOverTimeGraph = () => {
+    const { data } = this.props.explorerGraphs;
     const { classes } = this.props;
+    if (this.props.explorerGraphs.data.graphs.prevalenceOverTime.structuredData.length > 0) {
+      return (
+        <ResponsiveContainer>
+          <LineChart
+            data={data.graphs.prevalenceOverTime.structuredData}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            {data.graphs.prevalenceOverTime.labels.slice(0, 30).map((label, index) => (
+              <Line
+                connectNulls
+                type="monotone"
+                dataKey={label}
+                stroke={GRAPH_COLORS[index % GRAPH_COLORS.length]}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      );
+    } else {
+      return (
+        <div className={classes.centered}>
+          <h5>Not enough data.</h5>
+        </div>
+      );
+    }
+  };
+
+  render() {
+    const { classes, locations } = this.props;
     const { data, error, loading } = this.props.explorerGraphs;
     const { filters } = this.state;
-    if (data && data.graphs) console.log(data.graphs.prevalenceOverTime);
-    if (_.keys(data).length === 0 || loading || error)
+    if (data && data.graphs) console.log('prevalence data', data.graphs.prevalenceOverTime);
+    if (_.keys(data).length === 0)
       return (
         <div>
           <Navbar />
           <div style={{ minHeight: '100vh' }}>
-            <CenteredProgress />
+            {error && (
+              <Grid item xs={12} className={classes.centered}>
+                <Paper className={classes.centeredWithPadding}>
+                  <h3>Error loading graph data.</h3>
+                </Paper>
+              </Grid>
+            )}
+            {!error && <CenteredProgress />}
           </div>
         </div>
       );
@@ -106,6 +157,18 @@ export class Explorer extends Component {
                       }}
                     />
                   </Grid>
+                  {locations && (
+                    <Grid item>
+                      <Filter
+                        name="location"
+                        items={locations}
+                        chosen={filters.LocationId}
+                        handleFilterChange={event => {
+                          this.handleFilterChange('LocationId', event.target.value);
+                        }}
+                      />
+                    </Grid>
+                  )}
                   <Grid item>
                     <GroupByFilter
                       handleChange={event => {
@@ -117,35 +180,24 @@ export class Explorer extends Component {
                 </Grid>
               </Paper>
             </Grid>
+            {loading && (
+              <Grid item xs={12} className={classes.centered}>
+                <CircularProgress />
+              </Grid>
+            )}
+            {console.log(error)}
+            {error && (
+              <Grid item xs={12} className={classes.centered}>
+                <Paper className={classes.centeredWithPadding}>
+                  <h3>Error loading graph data.</h3>
+                </Paper>
+              </Grid>
+            )}
             <Grid item xs={12}>
               <Paper className={classes.graphContainer}>
                 <h3 className={classes.graphTitle}>Prevalence Over Time</h3>
                 <div className={classes.graphInnerContainer}>
-                  <ResponsiveContainer>
-                    <LineChart
-                      data={data.graphs.prevalenceOverTime.structuredData}
-                      margin={{
-                        top: 5,
-                        right: 30,
-                        left: 20,
-                        bottom: 5
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      {data.graphs.prevalenceOverTime.labels.map((label, index) => (
-                        <Line
-                          connectNulls
-                          type="monotone"
-                          dataKey={label}
-                          stroke={GRAPH_COLORS[index % GRAPH_COLORS.length]}
-                        />
-                      ))}
-                    </LineChart>
-                  </ResponsiveContainer>
+                  {this.renderPrevalenceOverTimeGraph()}
                 </div>
               </Paper>
             </Grid>
@@ -161,12 +213,13 @@ export class Explorer extends Component {
 }
 
 const mapStateToProps = state => {
-  return { explorerGraphs: state.explorerGraphs };
+  return { explorerGraphs: state.explorerGraphs, locations: state.locations.items };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchGraphs: filters => dispatch(fetchGraphs(filters))
+    fetchGraphs: filters => dispatch(fetchGraphs(filters)),
+    fetchLocations: () => dispatch(fetchLocations())
   };
 };
 
