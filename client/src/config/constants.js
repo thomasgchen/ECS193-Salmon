@@ -118,9 +118,10 @@ export const COMP_COLOR_GREEN = '#79BFA1';
 export const BACKGROUND_COLOR = '#eeeeee';
 
 export const GRAPH_COLORS = [
-  '#396AB1',
+  '#fa8072',
+  '#A3CBF1',
+  '#79BFA1',
   '#DA7C30',
-  '#3E9651',
   '#CC2529',
   '#535154',
   '#6B4C9A',

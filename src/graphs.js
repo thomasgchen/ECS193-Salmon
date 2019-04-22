@@ -71,7 +71,7 @@ const createGraphByGrouping = (data, grouping) => {
       structuredData.push(obj);
     }
   });
-  return structuredData;
+  return _.orderBy(structuredData, ['value'], ['desc']).slice(0, 8);
 };
 
 module.exports = { createGraphByTime, createGraphByGrouping };

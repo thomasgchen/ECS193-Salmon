@@ -5,6 +5,7 @@ import { fetchGraphs } from '../../redux/actions/explorerGraphs';
 import { fetchLocations } from '../../redux/actions/locations';
 import _ from 'lodash';
 import { Grid, withStyles, Paper, CircularProgress } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import {
   LineChart,
   Line,
@@ -13,14 +14,17 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 import { CenteredProgress } from '../Progress';
 import { GRAPH_COLORS, VALID_AGES, VALID_SPECIES, VALID_PATHOGENS } from '../../config/constants';
 import Filter, { GroupByFilter } from '../Filters';
 
 const styles = theme => ({
-  root: { flexGrow: 1, padding: '1%' },
+  root: { flexGrow: 1, padding: 0, margin: 0 },
   graphTitle: { width: '100%', textAlign: 'center', padding: '10px' },
   graphContainer: { height: '100%', width: '100%' },
   filterContainer: { paddingBottom: '10px' },
@@ -57,10 +61,46 @@ export class Explorer extends Component {
     );
   };
 
+  renderPieChart = name => {
+    const { data } = this.props.explorerGraphs;
+    const { classes } = this.props;
+    const graphData = data.graphs[`graphBy${name}`];
+    console.log(graphData);
+    if (graphData && graphData.length > 0) {
+      return (
+        <ResponsiveContainer>
+          <PieChart>
+            <Pie
+              dataKey="value"
+              isAnimationActive={false}
+              data={graphData}
+              cx={'50%'}
+              cy={'50%'}
+              outerRadius={100}
+              fill="#8884d8"
+              label
+            >
+              {graphData.map((entry, index) => (
+                <Cell fill={GRAPH_COLORS[index % GRAPH_COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
+      );
+    } else {
+      return (
+        <div className={classes.centered}>
+          <h5>Not enough data.</h5>
+        </div>
+      );
+    }
+  };
+
   renderPrevalenceOverTimeGraph = () => {
     const { data } = this.props.explorerGraphs;
     const { classes } = this.props;
-    if (this.props.explorerGraphs.data.graphs.prevalenceOverTime.structuredData.length > 0) {
+    if (data.graphs.prevalenceOverTime.structuredData.length > 0) {
       return (
         <ResponsiveContainer>
           <LineChart
@@ -199,12 +239,32 @@ export class Explorer extends Component {
                 </div>
               </Paper>
             </Grid>
+            <Grid item xs={4}>
+              <Paper className={classes.graphContainer}>
+                <h3 className={classes.graphTitle}>Infected Fish by Species</h3>
+                <div className={classes.graphInnerContainer}>{this.renderPieChart('Species')}</div>
+              </Paper>
+            </Grid>
+            <Grid item xs={4}>
+              <Paper className={classes.graphContainer}>
+                <h3 className={classes.graphTitle}>Infected Fish by Pathogen</h3>
+                <div className={classes.graphInnerContainer}>{this.renderPieChart('Pathogen')}</div>
+              </Paper>
+            </Grid>
+            <Grid item xs={4}>
+              <Paper className={classes.graphContainer}>
+                <h3 className={classes.graphTitle}>Infected Fish by Age</h3>
+                <div className={classes.graphInnerContainer}>{this.renderPieChart('Age')}</div>
+              </Paper>
+            </Grid>
           </Grid>
         </div>
-        <p>
-          Displaying data for: {this.props.explorerGraphs.data.hashIdentifier}, containing:{' '}
-          {data.dataLength} cases.
-        </p>
+        <div className={classes.centeredWithPadding}>
+          <Typography gutterBottom={true} variant="caption">
+            Displaying data for: {this.props.explorerGraphs.data.hashIdentifier}, containing:{' '}
+            {data.dataLength} cases.
+          </Typography>
+        </div>
       </div>
     );
   }
