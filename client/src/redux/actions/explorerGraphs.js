@@ -23,23 +23,19 @@ export const fetchExplorerGraphsFailure = error => ({
 });
 
 export const fetchGraphs = filters => {
-  console.log('filters', filters);
   const structuredFilters = _.mapValues(filters, filter => {
-    console.log(filter);
     if (_.isArray(filter)) {
       return _.join(filter, '~');
     } else {
       return filter;
     }
   });
-  console.log('structuredFilters', structuredFilters);
   return dispatch => {
     dispatch(fetchExplorerGraphsBegin());
 
     axios
       .get('/cases', { params: { explorer: true, ...structuredFilters } })
       .then(response => {
-        console.log(response);
         dispatch(fetchExplorerGraphsSuccess(response.data));
       })
       .catch(function(error) {

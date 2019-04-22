@@ -101,7 +101,6 @@ export class Explorer extends Component {
     const { classes, locations } = this.props;
     const { data, error, loading } = this.props.explorerGraphs;
     const { filters } = this.state;
-    if (data && data.graphs) console.log('prevalence data', data.graphs.prevalenceOverTime);
     if (_.keys(data).length === 0)
       return (
         <div>
@@ -185,7 +184,6 @@ export class Explorer extends Component {
                 <CircularProgress />
               </Grid>
             )}
-            {console.log(error)}
             {error && (
               <Grid item xs={12} className={classes.centered}>
                 <Paper className={classes.centeredWithPadding}>

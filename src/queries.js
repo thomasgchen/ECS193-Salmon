@@ -70,7 +70,10 @@ const getDataExplorerCases = (query, groupBy) => {
         hashIdentifier: dataHash,
         dataLength: rawData.length,
         graphs: {
-          prevalenceOverTime: graphs.createGraphByTime(rawData, groupBy)
+          prevalenceOverTime: graphs.createGraphByTime(rawData, groupBy),
+          graphBySpecies: graphs.createGraphByGrouping(rawData, 'species'),
+          graphByPathogen: graphs.createGraphByGrouping(rawData, 'pathogen'),
+          graphByAge: graphs.createGraphByGrouping(rawData, 'age')
         }
       };
 

@@ -13,6 +13,14 @@ const calculatePrevelence = arr => {
   return numPositive / numFish;
 };
 
+const calculateNumPositive = arr => {
+  let numPositive = 0;
+  arr.forEach(c => {
+    numPositive += c.numPositive;
+  });
+  return numPositive;
+};
+
 const createGraphByTime = (data, groupBy) => {
   const filteredData = _.reject(data, c => moment(c.date).isBefore('2000-01-01'));
   const groupedByYear = _.groupBy(filteredData, item => {
@@ -46,4 +54,24 @@ const createGraphByTime = (data, groupBy) => {
   return { structuredData, labels: _.uniq(labels) };
 };
 
-module.exports = { createGraphByTime };
+const createGraphByGrouping = (data, grouping) => {
+  const filteredData = _.reject(data, c => moment(c.date).isBefore('2000-01-01'));
+  const groupedCases = _.groupBy(filteredData, item => {
+    return item[grouping];
+  });
+
+  const groupedData = _.mapValues(groupedCases, cases => {
+    return calculateNumPositive(cases);
+  });
+
+  const structuredData = [];
+  _.forEach(_.keys(groupedData), key => {
+    if (groupedData[key] && groupedData[key] > 0) {
+      const obj = { name: key, value: groupedData[key] };
+      structuredData.push(obj);
+    }
+  });
+  return structuredData;
+};
+
+module.exports = { createGraphByTime, createGraphByGrouping };
