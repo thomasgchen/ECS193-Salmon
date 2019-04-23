@@ -8,6 +8,7 @@ const models = require('../models/index');
 const connectionString = process.env.DATABASE_URL;
 const sequelize = new Sequelize(connectionString);
 const graphs = require('./graphs');
+const saveFileToAWS = require('./jobs/saveFileToAWS');
 
 sequelize
   .authenticate()
@@ -78,6 +79,7 @@ const getDataExplorerCases = (query, groupBy) => {
       };
 
       // Save to AWS
+      saveFileToAWS.uploadFile(graphData, `explorerData-${dataHash}.json`);
       return graphData;
     });
   });
