@@ -98,9 +98,11 @@ export class Dashboard extends Component {
                 </Grid>
               );
             })}
+            <Grid item xs={12}>
+              <Map />
+            </Grid>
           </Grid>
         </div>
-        <Map />
       </div>
     );
   }
