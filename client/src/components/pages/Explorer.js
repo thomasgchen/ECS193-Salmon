@@ -22,9 +22,10 @@ import {
 import { CenteredProgress } from '../Progress';
 import { GRAPH_COLORS, VALID_AGES, VALID_SPECIES, VALID_PATHOGENS } from '../../config/constants';
 import Filter, { GroupByFilter } from '../Filters';
+import { ExplorerPieChart } from '../Graph';
 
 const styles = theme => ({
-  root: { flexGrow: 1, padding: 0, margin: 0 },
+  root: { flexGrow: 1, padding: '1em', margin: 0 },
   graphTitle: { width: '100%', textAlign: 'center', padding: '10px' },
   graphContainer: { height: '100%', width: '100%' },
   filterContainer: { paddingBottom: '10px' },
@@ -67,27 +68,7 @@ export class Explorer extends Component {
     const graphData = data.graphs[`graphBy${name}`];
     console.log(graphData);
     if (graphData && graphData.length > 0) {
-      return (
-        <ResponsiveContainer>
-          <PieChart>
-            <Pie
-              dataKey="value"
-              isAnimationActive={false}
-              data={graphData}
-              cx={'50%'}
-              cy={'50%'}
-              outerRadius={100}
-              fill="#8884d8"
-              label
-            >
-              {graphData.map((entry, index) => (
-                <Cell fill={GRAPH_COLORS[index % GRAPH_COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </ResponsiveContainer>
-      );
+      return <ExplorerPieChart graphData={graphData} />;
     } else {
       return (
         <div className={classes.centered}>

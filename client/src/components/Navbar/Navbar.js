@@ -29,6 +29,11 @@ const NavBar = () => {
               Data Explorer
             </Link>
           </Button>
+          <Button>
+            <Link to="/location" style={{ textDecoration: 'none', color: 'white' }}>
+              Location Profiler
+            </Link>
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
