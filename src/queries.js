@@ -39,7 +39,6 @@ const getCases = (page, query) => {
 };
 
 const getDataExplorerCasesRaw = query => {
-  console.log(query);
   const structuredQuery = _.mapValues(query, attr => _.split(attr, '~'));
   return models.Case.findAll({
     where: structuredQuery,
@@ -50,6 +49,7 @@ const getDataExplorerCasesRaw = query => {
     raw: true
   });
 };
+
 const getDataExplorerCases = (query, groupBy) => {
   return models.Case.findAll({
     limit: 1,

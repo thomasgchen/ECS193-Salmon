@@ -126,7 +126,7 @@ export class Explorer extends Component {
       return (
         <div>
           <Navbar />
-          <div style={{ minHeight: '100vh' }}>
+          <div>
             {error && (
               <Grid item xs={12} className={classes.centered}>
                 <Paper className={classes.centeredWithPadding}>

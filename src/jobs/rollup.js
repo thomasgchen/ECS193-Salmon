@@ -5,6 +5,7 @@ const AWS = require('aws-sdk');
 const _ = require('lodash');
 const Sequelize = require('sequelize');
 const models = require('../../models');
+const rollupLocationData = require('./rollupLocationData');
 
 const { Op } = Sequelize;
 
@@ -46,8 +47,6 @@ const p1 = models.Case.findAll({
   });
   graphData.pathogensPerLocation = result;
 });
-
-// TODO: GRAPH 2
 
 console.log('Creating GRAPH 3: Pathogens detected per species');
 // One data point: { species: "COHO", IHN: 1000, CTV: 400}
@@ -365,9 +364,24 @@ Promise.all([p1, p3, p4, p5, p6, p7, p8, p9]).then(() => {
       console.log(res);
     }
   });
+});
 
-  // fs.writeFile('temp.txt', JSON.stringify(graphData), (err, data) => {
-  //   if (err) console.log(err);
-  //   console.log('Successfully Written to File.');
-  // });
+rollupLocationData.rollup().then(data => {
+  const S3 = new AWS.S3();
+  const params = {
+    Bucket: process.env.AWS_BUCKET,
+    Key: 'locationGraphData.json',
+    Body: JSON.stringify(data),
+    ACL: 'public-read',
+    ContentType: 'application/JSON'
+  };
+
+  S3.upload(params, (err, res) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Uploaded.');
+      console.log(res);
+    }
+  });
 });

@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import Navbar from '../Navbar/Navbar';
 import { fetchGraphs } from '../../redux/actions/dashboardGraphs';
 import { withStyles } from '@material-ui/core';
-import { CenteredProgress } from '../Progress';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
-  root: { flexGrow: 1, padding: '1%' }
+  root: { flexGrow: 1, padding: '1%' },
+  centered: { width: '100%', textAlign: 'center' }
 });
 
 export class Dashboard extends Component {
@@ -21,8 +22,10 @@ export class Dashboard extends Component {
       return (
         <div>
           <Navbar />
-          <div style={{ minHeight: '100vh' }}>
-            <CenteredProgress />
+          <div className={classes.root} style={{ minHeight: '100vh' }}>
+            <div className={classes.centered}>
+              <CircularProgress />
+            </div>
           </div>
         </div>
       );
