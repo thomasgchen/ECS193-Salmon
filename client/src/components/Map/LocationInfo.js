@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class LocationInfo extends PureComponent {
   render() {
@@ -16,9 +17,12 @@ export default class LocationInfo extends PureComponent {
     return (
       <div>
         <div>
-          <a target="_new" href={`#`}>
+          <Link
+            to={`/locationprofile/${info.id}`}
+            // style={{ textDecoration: 'none', color: 'white' }}
+          >
             {displayName}
-          </a>
+          </Link>
           <p>
             {latitude},&nbsp;{longitude}
           </p>

@@ -18,15 +18,15 @@ const rollup = () => {
     raw: true
   }).then(foundCases => {
     const casesByLocation = _.groupBy(foundCases, item => {
-      return item['Location.name'];
+      return item.LocationId;
     });
 
     const structuredData = _.mapValues(casesByLocation, (cases, location) => {
       if (cases.length === 0) return null;
 
       const locData = {
-        name: location,
-        id: cases[0].LocationId,
+        name: cases[0]['Location.name'],
+        id: location,
         location: {
           latitude: cases[0]['Location.latitude'],
           longitude: cases[0]['Location.longitude']

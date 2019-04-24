@@ -14,10 +14,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell
+  ResponsiveContainer
 } from 'recharts';
 import { CenteredProgress } from '../Progress';
 import { GRAPH_COLORS, VALID_AGES, VALID_SPECIES, VALID_PATHOGENS } from '../../config/constants';

@@ -1,12 +1,16 @@
 import {
   FETCH_LOCATIONS_BEGIN,
   FETCH_LOCATIONS_SUCCESS,
-  FETCH_LOCATIONS_FAILURE
+  FETCH_LOCATIONS_FAILURE,
+  FETCH_LOCATION_PROFILES_BEGIN,
+  FETCH_LOCATION_PROFILES_SUCCESS,
+  FETCH_LOCATION_PROFILES_FAILURE
 } from '../actions/locations';
 
 const initialState = {
   items: [],
   locations: [],
+  profiles: {},
   loading: false,
   error: null
 };
@@ -35,6 +39,26 @@ export default function locations(state = initialState, action) {
       };
 
     case FETCH_LOCATIONS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error
+      };
+
+    case FETCH_LOCATION_PROFILES_BEGIN:
+      return {
+        ...state,
+        loading: true
+      };
+
+    case FETCH_LOCATION_PROFILES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        profiles: action.payload.profiles
+      };
+
+    case FETCH_LOCATION_PROFILES_FAILURE:
       return {
         ...state,
         loading: false,

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import MapGL, { Marker, Popup, NavigationControl } from 'react-map-gl';
 import LocationPin from './LocationPin';
 import LocationInfo from './LocationInfo';
-import { fetchLocations } from '../../redux/actions/locations';
-import { connect } from 'react-redux'; // import dotenv from 'dotenv';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // dotenv.config();
 const TOKEN =
@@ -21,20 +21,16 @@ class Map extends Component {
     super(props);
     this.state = {
       viewport: {
+        height: 400,
+        width: '100%',
         latitude: 38,
         longitude: -119,
         zoom: 4.5,
         bearing: 0,
-        pitch: 0,
-        width: 500,
-        height: 500
+        pitch: 0
       },
       popupInfo: null
     };
-  }
-
-  componentDidMount() {
-    this.props.fetchLocations();
   }
 
   _updateViewport = viewport => {
@@ -42,9 +38,14 @@ class Map extends Component {
   };
 
   _renderLocationMarker = location => {
+    if (this.props.singleLocationId && location.id != this.props.singleLocationId) return <span />;
     return (
       <Marker longitude={location.longitude} latitude={location.latitude}>
-        <LocationPin size={15} onClick={() => this.setState({ popupInfo: location })} />
+        <LocationPin
+          key={`PIN${location.longitude}-${location.latitude}(${location})`}
+          size={15}
+          onClick={() => this.setState({ popupInfo: location })}
+        />
       </Marker>
     );
   };
@@ -70,8 +71,9 @@ class Map extends Component {
 
   render() {
     const { viewport } = this.state;
-    const { locations, error, loading } = this.props.locations;
-
+    const { locations } = this.props;
+    console.log(locations);
+    if (!locations) return <CircularProgress />;
     return (
       <MapGL
         {...viewport}
@@ -89,17 +91,9 @@ class Map extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return { locations: state.locations };
+Map.propTypes = {
+  locations: PropTypes.array.isRequired,
+  singleLocationId: PropTypes.number
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchLocations: () => dispatch(fetchLocations())
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Map);
+export default Map;

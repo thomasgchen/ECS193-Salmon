@@ -5,7 +5,6 @@ import { fetchGraphs } from '../../redux/actions/dashboardGraphs';
 import { Grid, withStyles } from '@material-ui/core';
 import { StackedBarGraph, ScatterOverTime } from '../Graph';
 import { CenteredProgress } from '../Progress';
-import Map from '../Map/Map';
 
 const styles = theme => ({
   root: { flexGrow: 1, padding: '1%' }
@@ -98,9 +97,6 @@ export class Dashboard extends Component {
                 </Grid>
               );
             })}
-            <Grid item xs={12}>
-              <Map />
-            </Grid>
           </Grid>
         </div>
       </div>
