@@ -46,7 +46,7 @@ const createGraphByTime = (data, groupBy) => {
   _.forEach(_.keys(groupedData), key => {
     const obj = { name: key };
     _.forEach(_.keys(groupedData[key]), k => {
-      if (String(groupedData[key][k]) !== '0') obj[k] = groupedData[key][k];
+      obj[k] = groupedData[key][k];
     });
     structuredData.push(obj);
   });
