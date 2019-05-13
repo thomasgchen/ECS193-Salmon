@@ -8,8 +8,6 @@ const graphs = require('../graphs');
 
 // LOCATION ROLLUP DATA
 const rollup = () => {
-  const locationRollups = [];
-
   return models.Case.findAll({
     attributes: {
       exclude: ['createdAt', 'updatedAt', 'comments', 'confidence', 'fish', 'id']
@@ -36,7 +34,8 @@ const rollup = () => {
           prevalenceOverTime: graphs.createGraphByTime(cases, 'pathogen'),
           graphBySpecies: graphs.createGraphByGrouping(cases, 'species'),
           graphByPathogen: graphs.createGraphByGrouping(cases, 'pathogen'),
-          graphByAge: graphs.createGraphByGrouping(cases, 'age')
+          graphByAge: graphs.createGraphByGrouping(cases, 'age'),
+          prevalenceOverDischarge: graphs.createGraphByDischarge(cases, 'pathogen')
         }
       };
 

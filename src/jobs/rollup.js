@@ -4,6 +4,7 @@
 const AWS = require('aws-sdk');
 const _ = require('lodash');
 const Sequelize = require('sequelize');
+const outliers = require('outliers');
 const models = require('../../models');
 const rollupLocationData = require('./rollupLocationData');
 
@@ -335,9 +336,47 @@ const p9 = Promise.all(queriesCTV).then(() => {
   graphData.CTVPrevalenceOverTime = data;
 });
 
+console.log('Creating GRAPH 10: IHN Prevalence over discharge');
+const p10 = models.Case.findAll({
+  attributes: {
+    exclude: ['createdAt', 'updatedAt', 'comments', 'confidence', 'fish', 'id']
+  },
+  where: {
+    discharge: { [Op.not]: null },
+    pathogen: 'IHN'
+  },
+  raw: true
+}).then(cases => {
+  const data = cases.map(c => ({
+    discharge: c.discharge,
+    prevalence: c.prevalence
+  }));
+
+  graphData.IHNPrevalenceOverDischarge = data.filter(outliers('discharge'));
+});
+
+console.log('Creating GRAPH 11: CTV Prevalence over discharge');
+const p11 = models.Case.findAll({
+  attributes: {
+    exclude: ['createdAt', 'updatedAt', 'comments', 'confidence', 'fish', 'id']
+  },
+  where: {
+    discharge: { [Op.not]: null },
+    pathogen: 'CTV'
+  },
+  raw: true
+}).then(cases => {
+  const data = cases.map(c => ({
+    discharge: c.discharge,
+    prevalence: c.prevalence
+  }));
+
+  graphData.CTVPrevalenceOverDischarge = data.filter(outliers('discharge'));
+});
+
 // REPORT TO AWS
 
-Promise.all([p1, p3, p4, p5, p6, p7, p8, p9]).then(() => {
+Promise.all([p1, p3, p4, p5, p6, p7, p8, p9, p10, p11]).then(() => {
   console.log('graphData', graphData);
 
   AWS.config.update({

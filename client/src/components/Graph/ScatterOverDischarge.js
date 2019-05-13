@@ -38,7 +38,7 @@ const styles = theme => ({
   }
 });
 
-class ScatterOverTime extends Component {
+class ScatterOverDischarge extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -88,25 +88,20 @@ class ScatterOverTime extends Component {
               <CartesianGrid />
               <XAxis
                 type="number"
-                dataKey="x"
-                name="date"
+                dataKey="discharge"
+                name="discharge"
+                unit=" ft3/s"
+                // domain={['dataMin', 'dataMax']}
+              />
+              <YAxis
+                type="number"
+                dataKey="prevalence"
+                name="prevalence"
                 unit=""
-                domain={['dataMin', 'dataMax']}
+                // domain={['dataMin', 'dataMax']}
               />
-              <YAxis type="number" dataKey="y" name="prevelence" unit="" />
-              <Tooltip content={<ScatterPlotTooltip />} wrapperStyle={{}} />
-              <Scatter
-                name="Locations"
-                data={dataOne ? data[0].locations : data[1].locations}
-                fill={COMP_COLOR_BLUE}
-              />
-              <Scatter
-                name="Averages"
-                data={dataOne ? data[0].averages : data[1].averages}
-                fill={COMP_COLOR_GREEN}
-                line
-                lineType="joint"
-              />
+              <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+              <Scatter name="Data" data={dataOne ? data[0] : data[1]} fill={COMP_COLOR_BLUE} />
             </ScatterChart>
           </ResponsiveContainer>
         </div>
@@ -115,10 +110,10 @@ class ScatterOverTime extends Component {
   }
 }
 
-ScatterOverTime.propTypes = {
+ScatterOverDischarge.propTypes = {
   data: PropTypes.array.isRequired,
   dataTitles: PropTypes.array.isRequired,
   shortDataTitles: PropTypes.array.isRequired
 };
 
-export default withStyles(styles)(ScatterOverTime);
+export default withStyles(styles)(ScatterOverDischarge);

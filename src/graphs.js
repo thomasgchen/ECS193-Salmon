@@ -21,6 +21,23 @@ const calculateNumPositive = arr => {
   return numPositive;
 };
 
+const createGraphByDischarge = (data, groupBy) => {
+  const labels = [];
+  const grouped = _.groupBy(data, item => {
+    if (item[groupBy] !== null) labels.push(item[groupBy]);
+    return item[groupBy];
+  });
+  const structuredData = {};
+  delete grouped.null;
+  labels.forEach(label => {
+    structuredData[label] = grouped[label].map(c => ({
+      discharge: c.discharge,
+      prevalence: c.prevalence
+    }));
+  });
+  return { structuredData, labels: labels.uniq };
+};
+
 const createGraphByTime = (data, groupBy) => {
   const filteredData = _.reject(data, c => moment(c.date).isBefore('2000-01-01'));
   const groupedByYear = _.groupBy(filteredData, item => {
@@ -74,4 +91,4 @@ const createGraphByGrouping = (data, grouping) => {
   return _.orderBy(structuredData, ['value'], ['desc']).slice(0, 8);
 };
 
-module.exports = { createGraphByTime, createGraphByGrouping };
+module.exports = { createGraphByTime, createGraphByGrouping, createGraphByDischarge };
