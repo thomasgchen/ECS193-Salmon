@@ -5,6 +5,7 @@ import { fetchGraphs } from '../../redux/actions/dashboardGraphs';
 import { Grid, withStyles } from '@material-ui/core';
 import { StackedBarGraph, ScatterOverTime } from '../Graph';
 import { CenteredProgress } from '../Progress';
+import ScatterOverVar from '../Graph/ScatterOverVar';
 
 const styles = theme => ({
   root: { flexGrow: 1, padding: '1%' }
@@ -97,6 +98,38 @@ export class Dashboard extends Component {
                 </Grid>
               );
             })}
+            <Grid item xs={12}>
+              <ScatterOverVar
+                dataTitles={[
+                  'IHN Prevalence Over Yearly Precipitation',
+                  'CTV Prevalence Over Yearly Precipitation'
+                ]}
+                shortDataTitles={['IHN', 'CTV']}
+                data={[
+                  graphs.IHNPrevalenceOverYearlyPrecipitation,
+                  graphs.CTVPrevalenceOverYearlyPrecipitation
+                ]}
+                dataKeys={['precipitationYearly', 'precipitationYearly']}
+                dataUnits={[' mm', ' mm']}
+                multi
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <ScatterOverVar
+                dataTitles={[
+                  'IHN Prevalence Over Daily Max Temperature',
+                  'CTV Prevalence Over Daily Max Temperature'
+                ]}
+                shortDataTitles={['IHN', 'CTV']}
+                data={[
+                  graphs.IHNPrevalenceOverTemperatureMax,
+                  graphs.CTVPrevalenceOverTemperatureMax
+                ]}
+                dataKeys={['temperatureMax', 'temperatureMax']}
+                dataUnits={[' deg c', ' deg c']}
+                multi
+              />
+            </Grid>
           </Grid>
         </div>
       </div>

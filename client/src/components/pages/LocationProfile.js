@@ -40,6 +40,54 @@ export class Dashboard extends Component {
     this.props.fetchLocations();
   }
 
+  renderPrevalenceAndPrecipitationOverTimeGraph = data => {
+    const { classes } = this.props;
+    if (data.structuredData.length > 0) {
+      return (
+        <ResponsiveContainer>
+          <LineChart
+            data={data.structuredData}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis yAxisId="prcp" unit="mm" />
+            <YAxis yAxisId="prevalence" orientation="right" />
+            <Tooltip />
+            <Legend />
+            <Line
+              yAxisId="prevalence"
+              connectNulls
+              type="monotone"
+              dataKey="prevalence"
+              name="Prevalence"
+              stroke={GRAPH_COLORS[0 % GRAPH_COLORS.length]}
+            />
+            <Line
+              yAxisId="prcp"
+              connectNulls
+              type="monotone"
+              dataKey="precipitationYearly"
+              name="Yearly Precipitation"
+              stroke={GRAPH_COLORS[1 % GRAPH_COLORS.length]}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      );
+    } else {
+      return (
+        <div className={classes.centered}>
+          <h5>Not enough data.</h5>
+        </div>
+      );
+    }
+  };
+
   renderPrevalenceOverTimeGraph = data => {
     const { classes } = this.props;
     if (data.structuredData.length > 0) {
@@ -139,6 +187,17 @@ export class Dashboard extends Component {
                 <h3 className={classes.graphTitle}>Infected Fish by Age</h3>
                 <div className={classes.graphInnerContainer}>
                   <ExplorerPieChart graphData={data.graphs.graphByAge} />
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper>
+                {console.log('HERE', data.graphs)}
+                <h3 className={classes.graphTitle}>Prevalence and Precipitation over Time</h3>
+                <div className={classes.graphInnerContainer}>
+                  {this.renderPrevalenceAndPrecipitationOverTimeGraph(
+                    data.graphs.prevalenceAndPrecipitationOverTime
+                  )}
                 </div>
               </Paper>
             </Grid>

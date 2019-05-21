@@ -74,4 +74,28 @@ const createGraphByGrouping = (data, grouping) => {
   return _.orderBy(structuredData, ['value'], ['desc']).slice(0, 8);
 };
 
-module.exports = { createGraphByTime, createGraphByGrouping };
+const createBiaxialGraphByTime = (data, secondaryDataKey) => {
+  const filteredData = _.reject(data, c => moment(c.date).isBefore('2000-01-01'));
+  const groupedByYear = _.groupBy(filteredData, item => {
+    return item.date.substring(0, 4);
+  });
+  const groupedData = _.mapValues(groupedByYear, cases => {
+    return {
+      prevalence: calculatePrevelence(cases),
+      [secondaryDataKey]: cases[0][secondaryDataKey]
+    };
+  });
+
+  const structuredData = [];
+  _.forEach(_.keys(groupedData), key => {
+    const obj = { name: key };
+    _.forEach(_.keys(groupedData[key]), k => {
+      obj[k] = groupedData[key][k];
+    });
+    structuredData.push(obj);
+  });
+
+  return { structuredData };
+};
+
+module.exports = { createGraphByTime, createGraphByGrouping, createBiaxialGraphByTime };

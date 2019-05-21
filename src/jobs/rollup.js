@@ -335,9 +335,113 @@ const p9 = Promise.all(queriesCTV).then(() => {
   graphData.CTVPrevalenceOverTime = data;
 });
 
+console.log('Creating GRAPH 10: IHN Prevalence over Yearly Precipitation');
+const p10 = models.Case.findAll({
+  attributes: {
+    exclude: ['createdAt', 'updatedAt', 'comments', 'confidence', 'fish', 'id']
+  },
+  where: {
+    precipitationYearly: { [Op.not]: null },
+    pathogen: 'IHN'
+  },
+  raw: true
+}).then(cases => {
+  const casesBySpecies = _.groupBy(cases, item => {
+    return item.species;
+  });
+
+  const data = _.values(casesBySpecies).map(groupedCases =>
+    groupedCases.map(c => ({
+      precipitationYearly: c.precipitationYearly,
+      prevalence: c.prevalence,
+      species: c.species
+    }))
+  );
+
+  graphData.IHNPrevalenceOverYearlyPrecipitation = data;
+});
+
+console.log('Creating GRAPH 11: CTV Prevalence over Yearly Precipitation');
+const p11 = models.Case.findAll({
+  attributes: {
+    exclude: ['createdAt', 'updatedAt', 'comments', 'confidence', 'fish', 'id']
+  },
+  where: {
+    precipitationYearly: { [Op.not]: null },
+    pathogen: 'CTV'
+  },
+  raw: true
+}).then(cases => {
+  const casesBySpecies = _.groupBy(cases, item => {
+    return item.species;
+  });
+
+  const data = _.values(casesBySpecies).map(groupedCases =>
+    groupedCases.map(c => ({
+      precipitationYearly: c.precipitationYearly,
+      prevalence: c.prevalence,
+      species: c.species
+    }))
+  );
+
+  graphData.CTVPrevalenceOverYearlyPrecipitation = data;
+});
+
+console.log('Creating GRAPH 12: IHN Prevalence over Max Temperature');
+const p12 = models.Case.findAll({
+  attributes: {
+    exclude: ['createdAt', 'updatedAt', 'comments', 'confidence', 'fish', 'id']
+  },
+  where: {
+    temperatureMax: { [Op.not]: null },
+    pathogen: 'IHN'
+  },
+  raw: true
+}).then(cases => {
+  const casesBySpecies = _.groupBy(cases, item => {
+    return item.species;
+  });
+
+  const data = _.values(casesBySpecies).map(groupedCases =>
+    groupedCases.map(c => ({
+      temperatureMax: c.temperatureMax,
+      prevalence: c.prevalence,
+      species: c.species
+    }))
+  );
+
+  graphData.IHNPrevalenceOverTemperatureMax = data;
+});
+
+console.log('Creating GRAPH 13: CTV Prevalence over Max Temperature');
+const p13 = models.Case.findAll({
+  attributes: {
+    exclude: ['createdAt', 'updatedAt', 'comments', 'confidence', 'fish', 'id']
+  },
+  where: {
+    temperatureMax: { [Op.not]: null },
+    pathogen: 'CTV'
+  },
+  raw: true
+}).then(cases => {
+  const casesBySpecies = _.groupBy(cases, item => {
+    return item.species;
+  });
+
+  const data = _.values(casesBySpecies).map(groupedCases =>
+    groupedCases.map(c => ({
+      temperatureMax: c.temperatureMax,
+      prevalence: c.prevalence,
+      species: c.species
+    }))
+  );
+
+  graphData.CTVPrevalenceOverTemperatureMax = data;
+});
+
 // REPORT TO AWS
 
-Promise.all([p1, p3, p4, p5, p6, p7, p8, p9]).then(() => {
+Promise.all([p1, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13]).then(() => {
   console.log('graphData', graphData);
 
   AWS.config.update({

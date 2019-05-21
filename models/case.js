@@ -10,7 +10,9 @@ module.exports = (sequelize, DataTypes) => {
     fish: DataTypes.BOOLEAN,
     numPositive: DataTypes.INTEGER,
     prevalence: DataTypes.DOUBLE,
-    comments: DataTypes.STRING
+    comments: DataTypes.STRING,
+    precipitationYearly: DataTypes.DOUBLE,
+    temperatureMax: DataTypes.DOUBLE
   });
   Case.associate = models => {
     Case.belongsTo(models.Location);
