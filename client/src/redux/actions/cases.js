@@ -89,12 +89,12 @@ export const fetchCases = (page, filters) => {
   };
 };
 
-export const updateCase = data => {
+export const updateCase = (data, auth) => {
   return dispatch => {
     dispatch(updateCasesBegin());
 
     axios
-      .put('/cases', data)
+      .put('/cases', data, { headers: { Authorization: `Basic ${auth}` } })
       .then(response => {
         dispatch(updateCasesSuccess(response.data));
       })
@@ -104,12 +104,12 @@ export const updateCase = data => {
   };
 };
 
-export const createCase = data => {
+export const createCase = (data, auth) => {
   return dispatch => {
     dispatch(createCasesBegin());
 
     axios
-      .post('/cases', data)
+      .post('/cases', data, { headers: { Authorization: `Basic ${auth}` } })
       .then(response => {
         dispatch(createCasesSuccess(response.data));
       })
@@ -119,12 +119,12 @@ export const createCase = data => {
   };
 };
 
-export const deleteCase = id => {
+export const deleteCase = (id, auth) => {
   return dispatch => {
     dispatch(deleteCasesBegin());
 
     axios
-      .delete('/cases', { data: { id } })
+      .delete('/cases', { data: { id } }, { headers: { Authorization: `Basic ${auth}` } })
       .then(response => {
         dispatch(deleteCasesSuccess(response.data.id));
       })

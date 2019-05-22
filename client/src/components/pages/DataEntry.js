@@ -7,6 +7,8 @@ import Entries from '../Entries';
 import Preview from '../Preview';
 import Navbar from '../Navbar/Navbar';
 import { Grid } from '@material-ui/core';
+import LoginDialog from '../LoginDialog';
+import { validatePass } from '../../redux/actions/auth';
 
 export class DataEntry extends Component {
   constructor(props) {
@@ -26,6 +28,17 @@ export class DataEntry extends Component {
     return (
       <div style={{ margin: 0, overflow: 'hidden', height: '100vh', width: '100vw' }}>
         <Navbar />
+        {this.props.auth.pass === '' && (
+          <div style={{ width: '100%', textAlign: 'center', padding: '2%' }}>
+            <LoginDialog
+              attemptPassword={password => {
+                this.props.validatePass(password);
+              }}
+              loading={this.props.auth.loading}
+            />
+          </div>
+        )}
+
         <div
           style={{
             height: '95%',
@@ -82,7 +95,16 @@ export class DataEntry extends Component {
 }
 
 const mapStateToProps = state => {
-  return { test: state.test };
+  return { auth: state.auth };
 };
 
-export default connect(mapStateToProps)(DataEntry);
+const mapDispatchToProps = dispatch => {
+  return {
+    validatePass: pass => dispatch(validatePass(pass))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DataEntry);

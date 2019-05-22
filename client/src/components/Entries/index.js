@@ -128,15 +128,15 @@ export class Entries extends Component {
   handleUpdate = (id, data) => {
     if (id === -1) {
       // New case
-      this.props.createCase(data);
+      this.props.createCase(data, this.props.auth.pass);
       this.props.handleNewEntryOpen();
     } else {
-      this.props.updateCase({ ...data, id });
+      this.props.updateCase({ ...data, id }, this.props.auth.pass);
     }
   };
 
   handleDelete = id => {
-    this.props.deleteCase(id);
+    this.props.deleteCase(id, this.props.auth.pass);
   };
 
   handleLoadMore = () => {
@@ -278,15 +278,15 @@ Entries.propTypes = {
 };
 
 const mapStateToProps = state => {
-  return { cases: state.cases, locations: state.locations };
+  return { cases: state.cases, locations: state.locations, auth: state.auth };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchCases: (page, filters) => dispatch(fetchCases(page, filters)),
-    deleteCase: id => dispatch(deleteCase(id)),
-    updateCase: data => dispatch(updateCase(data)),
-    createCase: data => dispatch(createCase(data)),
+    deleteCase: (id, auth) => dispatch(deleteCase(id, auth)),
+    updateCase: (data, auth) => dispatch(updateCase(data, auth)),
+    createCase: (data, auth) => dispatch(createCase(data, auth)),
     fetchLocations: () => dispatch(fetchLocations())
   };
 };

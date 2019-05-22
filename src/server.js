@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./queries');
+const authorizer = require('./authorizeMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,6 +16,15 @@ app.use(
     extended: true
   })
 );
+
+app.use((req, res, next) => {
+  if (req.method !== 'GET') return authorizer.authorize(req, res, next);
+  return next();
+});
+
+app.post('/validate_auth', (req, res) => {
+  res.status(200).json({ status: 200, msg: 'Password is correct.' });
+});
 
 app.get('/', (req, res) => {
   res.json({ info: 'Node.js, Express, and Postgres API' });
@@ -46,6 +56,7 @@ app.get('/cases', (req, res) => {
         res.status(200).json(cases);
       })
       .catch(err => {
+        console.log(err);
         res.status(500).send(err);
       });
   } else {

@@ -32,7 +32,7 @@ const getCases = (page, query) => {
     order: [['id', 'ASC']],
     limit,
     offset: limit * (page || 0),
-    attributes: { exclude: ['createdAt', 'updatedAt'] },
+    attributes: { exclude: ['createdAt', 'updatedAt', 'precipitationYearly', 'temperatureMax'] },
     include: [{ model: models.Location, attributes: ['name'] }],
     raw: true
   });
@@ -77,7 +77,7 @@ const getDataExplorerCases = (query, groupBy) => {
           graphByAge: graphs.createGraphByGrouping(rawData, 'age')
         }
       };
-
+      console.log('graphdata', graphData);
       // Save to AWS
       saveFileToAWS.uploadFile(graphData, `explorerData-${dataHash}.json`);
       return graphData;
@@ -90,7 +90,9 @@ const createCase = (req, res) => {
     .then(newCase => {
       models.Case.findOne({
         where: { id: newCase.id },
-        attributes: { exclude: ['createdAt', 'updatedAt'] },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'precipitationYearly', 'temperatureMax']
+        },
         include: [{ model: models.Location, attributes: ['name'] }],
         raw: true
       })
@@ -145,7 +147,9 @@ const updateCase = (req, res) => {
         .then(updatedCase => {
           models.Case.findOne({
             where: { id: updatedCase.id },
-            attributes: { exclude: ['createdAt', 'updatedAt'] },
+            attributes: {
+              exclude: ['createdAt', 'updatedAt', 'precipitationYearly', 'temperatureMax']
+            },
             include: [{ model: models.Location, attributes: ['name'] }],
             raw: true
           }).then(caseObj => {

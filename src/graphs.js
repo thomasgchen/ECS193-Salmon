@@ -24,7 +24,7 @@ const calculateNumPositive = arr => {
 const createGraphByTime = (data, groupBy) => {
   const filteredData = _.reject(data, c => moment(c.date).isBefore('2000-01-01'));
   const groupedByYear = _.groupBy(filteredData, item => {
-    return item.date.substring(0, 4);
+    return item.date ? item.date.substring(0, 4) : null;
   });
   const labels = [];
   const groupedData = _.mapValues(groupedByYear, cases => {
@@ -77,7 +77,7 @@ const createGraphByGrouping = (data, grouping) => {
 const createBiaxialGraphByTime = (data, secondaryDataKey) => {
   const filteredData = _.reject(data, c => moment(c.date).isBefore('2000-01-01'));
   const groupedByYear = _.groupBy(filteredData, item => {
-    return item.date.substring(0, 4);
+    return item.date ? item.date.substring(0, 4) : null;
   });
   const groupedData = _.mapValues(groupedByYear, cases => {
     return {
