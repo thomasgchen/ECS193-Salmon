@@ -1,6 +1,7 @@
 require('dotenv').load();
 const express = require('express');
 const bodyParser = require('body-parser');
+let converter = require('json-2-csv');
 const cors = require('cors');
 const db = require('./queries');
 const authorizer = require('./authorizeMiddleware');
@@ -40,6 +41,24 @@ app.get('/locations', (req, res) => {
     });
 });
 
+app.get('/cases.csv', (req, res) => {
+  const filter = {};
+  const validFilters = ['species', 'age', 'LocationId', 'pathogen'];
+  validFilters.forEach(f => {
+    if (req.param(f) && req.param(f) !== '') filter[f] = req.param(f);
+  });
+
+  db.downloadCases(filter)
+    .then(cases => {
+      converter.json2csvAsync(cases, { expandArrayObjects: true }).then(csv => {
+        res.status(200).send(Buffer.from(csv));
+      });
+    })
+    .catch(error => {
+      res.status(500).json({ status: '500', msg: 'Unkown error', err: String(error) });
+    });
+});
+
 app.get('/cases', (req, res) => {
   const filter = {};
   const validFilters = ['species', 'age', 'LocationId', 'pathogen'];
@@ -47,7 +66,13 @@ app.get('/cases', (req, res) => {
     if (req.param(f) && req.param(f) !== '') filter[f] = req.param(f);
   });
 
-  if (req.param('explorer') && req.param('explorer') === 'true') {
+  if (req.param('dump') && req.param('dump') === 'true') {
+    db.downloadCases(filter).then(cases => {
+      converter.json2csvAsync(cases, { expandArrayObjects: true }).then(csv => {
+        res.status(200).send(Buffer.from(csv));
+      });
+    });
+  } else if (req.param('explorer') && req.param('explorer') === 'true') {
     const validGroupBys = ['age', 'pathogen', 'species', 'Location.name'];
     let groupBy = '';
     if (validGroupBys.includes(req.param('groupBy'))) groupBy = req.param('groupBy');

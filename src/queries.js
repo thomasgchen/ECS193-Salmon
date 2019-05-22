@@ -38,6 +38,16 @@ const getCases = (page, query) => {
   });
 };
 
+const downloadCases = query => {
+  return models.Case.findAll({
+    where: query,
+    order: [['id', 'ASC']],
+    attributes: { exclude: ['createdAt', 'updatedAt', 'id'] },
+    include: [{ model: models.Location, attributes: ['name', 'latitude', 'longitude'] }],
+    raw: true
+  });
+};
+
 const getDataExplorerCasesRaw = query => {
   const structuredQuery = _.mapValues(query, attr => _.split(attr, '~'));
   return models.Case.findAll({
@@ -171,5 +181,6 @@ module.exports = {
   createCase,
   destroyCase,
   updateCase,
-  getDataExplorerCases
+  getDataExplorerCases,
+  downloadCases
 };
