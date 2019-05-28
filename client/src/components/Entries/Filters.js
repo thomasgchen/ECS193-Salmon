@@ -5,6 +5,9 @@ import SelectField from './SelectField';
 import { withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+
 import { SALMON_COLOR } from '../../config/constants';
 
 const styles = theme => ({
@@ -22,7 +25,7 @@ const styles = theme => ({
   }
 });
 
-const Filters = ({ locations, handleFilterChange, classes, values }) => {
+const Filters = ({ locations, handleFilterChange, classes, values, handleDumpDownload }) => {
   return (
     <Paper className={classes.root}>
       <Grid container spacing={16} justify="center">
@@ -75,6 +78,11 @@ const Filters = ({ locations, handleFilterChange, classes, values }) => {
             Clear Filters
           </Button>
         </Grid>
+        <Grid item xs={1}>
+          <IconButton className={classes.button} onClick={handleDumpDownload} color="secondary">
+            <CloudDownloadIcon />
+          </IconButton>
+        </Grid>
       </Grid>
     </Paper>
   );
@@ -82,6 +90,7 @@ const Filters = ({ locations, handleFilterChange, classes, values }) => {
 
 Filters.propTypes = {
   handleFilterChange: PropTypes.func.isRequired,
+  handleDumpDownload: PropTypes.func.isRequired,
   locations: PropTypes.array.isRequired,
   classes: PropTypes.object.isRequired,
   values: PropTypes.object.isRequired

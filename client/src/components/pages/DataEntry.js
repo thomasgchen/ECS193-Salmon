@@ -28,24 +28,13 @@ export class DataEntry extends Component {
     return (
       <div style={{ margin: 0, overflow: 'hidden', height: '100vh', width: '100vw' }}>
         <Navbar />
-        {this.props.auth.pass === '' && (
-          <div style={{ width: '100%', textAlign: 'center', padding: '2%' }}>
-            <LoginDialog
-              attemptPassword={password => {
-                this.props.validatePass(password);
-              }}
-              loading={this.props.auth.loading}
-            />
-          </div>
-        )}
-
         <div
           style={{
             height: '95%',
             width: '65%',
-            paddingTop: '10px',
-            paddingRight: '10xpx',
-            display: 'inline-block',
+            paddingRight: '10px',
+            paddingBottom: '10px',
+            float: 'left',
             overflowX: 'hidden',
             margin: '0'
           }}
@@ -54,11 +43,10 @@ export class DataEntry extends Component {
         </div>
         <div
           style={{
-            height: '95%',
+            height: '100%',
             width: '33%',
             overflow: 'hidden',
-            margin: '0',
-            display: 'inline-block'
+            margin: '0'
           }}
         >
           <div style={{ flexGrow: 1, height: '100%', width: '100%' }}>
@@ -70,6 +58,16 @@ export class DataEntry extends Component {
               style={{ height: '100%', width: '100%' }}
             >
               <Grid item xs={12} style={{ width: '100%', height: '60%' }}>
+                {this.props.auth.pass === '' && (
+                  <div style={{ width: '100%', textAlign: 'center', padding: '2%' }}>
+                    <LoginDialog
+                      attemptPassword={password => {
+                        this.props.validatePass(password);
+                      }}
+                      loading={this.props.auth.loading}
+                    />
+                  </div>
+                )}
                 <Preview />
               </Grid>
             </Grid>

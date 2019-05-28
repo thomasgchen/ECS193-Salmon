@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { fetchCases, updateCase, deleteCase, createCase } from '../../redux/actions/cases';
@@ -12,6 +13,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import FileDownload from 'js-file-download';
 import { withStyles } from '@material-ui/core/styles';
 
 const selectFields = ['age', 'pathogen', 'species', 'LocationId'];
@@ -165,6 +167,13 @@ export class Entries extends Component {
     }
   };
 
+  handleDumpDownload = () => {
+    const { filters } = this.state;
+    axios.get('/cases.csv', { params: filters }).then(response => {
+      FileDownload(response.data, 'report.csv');
+    });
+  };
+
   render() {
     const { handleNewEntryOpen, newEntryOpen } = this.props;
     const { error: casesError, loading: casesLoading, items, noMoreToLoad } = this.props.cases;
@@ -192,6 +201,7 @@ export class Entries extends Component {
               locations={locations}
               handleFilterChange={this.handleFilterChange}
               values={filters}
+              handleDumpDownload={this.handleDumpDownload}
             />
           </Grid>
           <Grid xs={10} item className={this.props.classes.scrollableSection}>
@@ -212,7 +222,7 @@ export class Entries extends Component {
             <EntryItem
               hidden={!newEntryOpen}
               newItem
-              id={-1}
+              id={`New Entry Item`}
               fields={this.structuredFields(items[0])}
               handleUpdate={this.handleUpdate}
               handleDelete={handleNewEntryOpen}
@@ -252,9 +262,6 @@ export class Entries extends Component {
           }}
           message={<span id="message-id">{error}</span>}
           action={[
-            // <Button key="undo" color="secondary" size="small" onClick={this.handleClose}>
-            //   UNDO
-            // </Button>,
             <IconButton
               key="close"
               aria-label="Close"
