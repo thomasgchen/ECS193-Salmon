@@ -28,6 +28,7 @@ export class DataEntry extends Component {
     return (
       <div style={{ margin: 0, overflow: 'hidden', height: '100vh', width: '100vw' }}>
         <Navbar />
+
         <div
           style={{
             height: '95%',
@@ -43,13 +44,14 @@ export class DataEntry extends Component {
         </div>
         <div
           style={{
-            height: '100%',
+            height: '90%',
             width: '33%',
             overflow: 'hidden',
-            margin: '0'
+            margin: '0',
+            marginTop: '2%'
           }}
         >
-          <div style={{ flexGrow: 1, height: '100%', width: '100%' }}>
+          <div style={{ flexGrow: 1, height: '100%', width: '100%', float: 'right' }}>
             <Grid
               container
               direction="row"
@@ -73,6 +75,7 @@ export class DataEntry extends Component {
             </Grid>
           </div>
         </div>
+        <div style={{ clear: 'both' }} />
         <Fab
           style={{
             backgroundColor: SALMON_COLOR,

@@ -222,7 +222,7 @@ export class Entries extends Component {
             <EntryItem
               hidden={!newEntryOpen}
               newItem
-              id={`New Entry Item`}
+              id={-1}
               fields={this.structuredFields(items[0])}
               handleUpdate={this.handleUpdate}
               handleDelete={handleNewEntryOpen}
@@ -260,7 +260,13 @@ export class Entries extends Component {
           ContentProps={{
             'aria-describedby': 'message-id'
           }}
-          message={<span id="message-id">{error}</span>}
+          message={
+            <span id="message-id">
+              {error.match(/401/g)
+                ? 'You are in read-only mode. Login by pressing the button over the graph'
+                : error}
+            </span>
+          }
           action={[
             <IconButton
               key="close"
