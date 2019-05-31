@@ -25,7 +25,9 @@
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
-    "base-64": "^0.1.0"
+    "base-64": "^0.1.0",
+    "js-file-download": "^0.4.5",
+    "json-2-csv": "^3.5.3"
   },
   "scripts": {
     "start": "react-scripts start",
