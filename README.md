@@ -16,4 +16,6 @@ DATABASE_URL=postgres://tchen@127.0.0.1:5432/ecs193_database_development
 AWS_ACCESS_KEY_ID=XXX
 AWS_SECRET_ACCESS_KEY=YYY
 AWS_BUCKET=salmon-health
+NOAA_TOKEN=ZZZ
+ADMIN_PASSWORD=password
 ```
