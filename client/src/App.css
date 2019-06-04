@@ -32,3 +32,26 @@
     transform: rotate(360deg);
   }
 }
+
+#root-content {
+  display: none;
+}
+
+#mobile-block {
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media only screen and (min-width: 768px) {
+  #root-content {
+    display: initial;
+  }
+
+  #mobile-block {
+    display: none;
+  }
+}

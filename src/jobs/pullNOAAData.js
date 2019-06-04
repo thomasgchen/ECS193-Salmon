@@ -161,7 +161,9 @@ const populateCases = () => {
         temperatureMax: null
       }
     },
-    include: [{ model: models.Location }]
+    order: [[Sequelize.literal('RANDOM()')]],
+    include: [{ model: models.Location }],
+    limit: 100
   }).then(cases => {
     if (args.split) {
       if (args.i === 1) {

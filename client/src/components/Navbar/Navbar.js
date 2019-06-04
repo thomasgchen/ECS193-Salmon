@@ -12,7 +12,7 @@ const NavBar = () => {
       <AppBar position="static" style={{ backgroundColor: SALMON_COLOR }}>
         <Toolbar>
           <Typography variant="title" color="inherit" style={{ flex: 1 }}>
-            Salmon
+            California Fish Health Monitoring Portal
           </Typography>
           <Button>
             <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>

@@ -15,19 +15,24 @@ class App extends Component {
   render() {
     return (
       <div style={{ backgroundColor: BACKGROUND_COLOR }}>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
-          <Router>
-            <Switch>
-              <Route path="/entry" component={DataEntry} />
-              <Route path="/explorer" component={Explorer} />
-              <Route path="/dashboard" component={Dashboard} />
-              <Route path="/location" component={Location} />
-              <Route path="/locationprofile/:id" component={LocationProfile} />
-              <Route path="/locationprofile" component={Location} />
-              <Redirect from="/" to="dashboard" />
-            </Switch>
-          </Router>
-        </MuiPickersUtilsProvider>
+        <div id="root-content">
+          <MuiPickersUtilsProvider utils={MomentUtils}>
+            <Router>
+              <Switch>
+                <Route path="/entry" component={DataEntry} />
+                <Route path="/explorer" component={Explorer} />
+                <Route path="/dashboard" component={Dashboard} />
+                <Route path="/location" component={Location} />
+                <Route path="/locationprofile/:id" component={LocationProfile} />
+                <Route path="/locationprofile" component={Location} />
+                <Redirect from="/" to="dashboard" />
+              </Switch>
+            </Router>
+          </MuiPickersUtilsProvider>
+        </div>
+        <div id="mobile-block">
+          <p>Not supported on Mobile. Switch to a larger device.</p>
+        </div>
       </div>
     );
   }

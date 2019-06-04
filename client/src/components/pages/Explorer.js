@@ -22,7 +22,7 @@ import Filter, { GroupByFilter } from '../Filters';
 import { ExplorerPieChart } from '../Graph';
 
 const styles = theme => ({
-  root: { flexGrow: 1, padding: '1em', margin: 0 },
+  root: { flexGrow: 1, padding: '1em', margin: 0, height: '100vh' },
   graphTitle: { width: '100%', textAlign: 'center', padding: '10px' },
   graphContainer: { height: '100%', width: '100%' },
   filterContainer: { paddingBottom: '10px' },
