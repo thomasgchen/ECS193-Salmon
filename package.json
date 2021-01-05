@@ -25,7 +25,7 @@
   "homepage": "https://github.com/thomasgchen/ECS193-Salmon#readme",
   "dependencies": {
     "aws-sdk": "^2.418.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "base-64": "^0.1.0",
     "body-parser": "^1.18.3",
     "concurrently": "^4.1.0",
