@@ -47,10 +47,10 @@
   ],
   "devDependencies": {
     "redux-devtools": "^3.5.0",
-    "terser": "3.14.1",
+    "terser": "4.8.1",
     "eslint-plugin-jsx-a11y": "^2.2.3"
   },
   "resolutions": {
-    "terser": "3.14.1"
+    "terser": "4.8.1"
   }
 }
